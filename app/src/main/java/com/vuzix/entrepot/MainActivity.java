@@ -46,7 +46,7 @@ Copyright (c) 2015, Vuzix Corporation
 // smaller
 //
 
-package com.vuzix.colordemo;
+package com.vuzix.entrepot;
 
 import java.util.ArrayList;
 
@@ -65,7 +65,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 
-import com.vuzix.speech.Constants;
 import com.vuzix.speech.VoiceControl;
 
 
