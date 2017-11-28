@@ -1,36 +1,7 @@
 #Internal package file, do not edit.
-#Tue Nov 28 13:07:13 CET 2017
-2.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-5.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-xhdpi-v4\\ic_launcher.png
-5.set=ANDROID_RESOURCE
-3.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-6.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\resources.arsc
-2.set=ANDROID_RESOURCE
-10.set=ANDROID_RESOURCE
-10.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\menu\\menu_main.xml
-4.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\assets\\debug
-7.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\assets\\debug\\drawing_custom.bnf
-7.set=ASSET
-count=11
-0.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-hdpi-v4\\ic_launcher.png
-5.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-8.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\layout\\activity_main.xml
-4.set=ASSET
-6.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-1.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0\\classes.dex
-9.set=ANDROID_RESOURCE
-9.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-mdpi-v4\\ic_launcher.png
-10.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-1.set=DEX
-7.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\assets\\debug
-2.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-xxhdpi-v4\\ic_launcher.png
-6.set=ANDROID_RESOURCE
-0.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-8.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-3.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\AndroidManifest.xml
-3.set=ANDROID_RESOURCE
-1.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
-9.base=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-4.file=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\assets\\debug\\drawing_custom.lcf
-8.set=ANDROID_RESOURCE
-0.set=ANDROID_RESOURCE
+#Tue Nov 28 13:36:19 CET 2017
+0.baseType=DIRECTORY
+0.base=C\:\\M100\\Hello\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+0.path=classes.dex
+0.set=DEX
+count=1
