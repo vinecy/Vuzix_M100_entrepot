@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="C:\M100\Vuzix_M100_entrepot\app\src\main\assets"><file name="drawing_custom.bnf" path="C:\M100\Vuzix_M100_entrepot\app\src\main\assets\drawing_custom.bnf"/><file name="drawing_custom.lcf" path="C:\M100\Vuzix_M100_entrepot\app\src\main\assets\drawing_custom.lcf"/></source><source path="C:\M100\Vuzix_M100_entrepot\app\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="C:\M100\Vuzix_M100_entrepot\app\src\debug\assets"/></dataSet></merger>
