@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Color Demo</string>
+    <string name="app_name">Scan App</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 </resources>
