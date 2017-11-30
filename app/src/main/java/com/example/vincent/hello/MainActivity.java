@@ -1,52 +1,94 @@
 package com.example.vincent.hello;
 
+import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.widget.TextView;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    TextView helloTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        Log.d("MainActivity", "le programme a démarré");
+        final TextView helloTextView = (TextView) findViewById(R.id.text_view_id);
+        helloTextView.setText(R.string.user_greeting);
+
+        Myasync test;
+        test = new Myasync(this);
+        test.execute();
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    class Myasync extends AsyncTask<URL, Integer, String> {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        Activity mActivity;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        public Myasync(Activity activity) {
+            mActivity = activity;
         }
 
-        return super.onOptionsItemSelected(item);
+        @Override
+        protected String doInBackground(URL... urls) {
+
+            HttpClient client = new DefaultHttpClient();
+            HttpGet request = new HttpGet("http://www.bartholomeau.fr/test.php?test=ça_marche");
+            HttpResponse response = null;
+            String result = null;
+
+            try {
+                response = client.execute(request);
+                Log.d("reponse", String.valueOf(response.getStatusLine()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedReader rd = null;
+            try {
+                rd = new BufferedReader
+                        (new InputStreamReader(
+
+                                response.getEntity().getContent()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String line = "";
+            result = "";
+            try {
+                while ((line = rd.readLine()) != null) {
+                    //helloTextView.append(line);
+                    result=result.concat(line);
+                    Log.d("test line",line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+
+
+        protected void onPostExecute(String result) {
+            Log.d("result",result);
+            helloTextView=(TextView)findViewById(R.id.text_view_id);
+            helloTextView.setText(result);
+        }
     }
 }
