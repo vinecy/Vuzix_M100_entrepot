@@ -1,4 +1,4 @@
-#Thu Nov 30 22:29:05 CET 2017
+#Thu Nov 30 22:47:44 CET 2017
 base.0=C\:\\M100\\Vuzix_M100_entrepot\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
 path.0=classes.dex
 renamed.0=classes.dex

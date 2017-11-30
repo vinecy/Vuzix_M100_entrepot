@@ -20,6 +20,7 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    // texte de l'activité
     TextView helloTextView;
 
     @Override
@@ -28,66 +29,65 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.d("MainActivity", "le programme a démarré");
-        final TextView helloTextView = (TextView) findViewById(R.id.text_view_id);
+        final TextView helloTextView = findViewById(R.id.text_view_id);
         helloTextView.setText(R.string.user_greeting);
 
-        Myasync test;
-        test = new Myasync(this);
+        //creation et appel de la connexion de maniere asynchrone
+        Myasync test = new Myasync();
         test.execute();
 
     }
 
     class Myasync extends AsyncTask<URL, Integer, String> {
 
-        Activity mActivity;
-
-        public Myasync(Activity activity) {
-            mActivity = activity;
-        }
-
         @Override
         protected String doInBackground(URL... urls) {
 
+            //creation connexion au seveur
+            //TODO généralisé le serveur grâce a URL
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet("http://www.bartholomeau.fr/test.php?test=ça_marche");
             HttpResponse response = null;
-            String result = null;
+            String result;
 
             try {
+                //connexion
                 response = client.execute(request);
-                Log.d("reponse", String.valueOf(response.getStatusLine()));
+                Log.d("status reponse", String.valueOf(response.getStatusLine()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            //lecture de reponse
             BufferedReader rd = null;
             try {
+                assert response != null;
                 rd = new BufferedReader
                         (new InputStreamReader(
-
                                 response.getEntity().getContent()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            String line = "";
+            String line ;
             result = "";
             try {
+                assert rd != null;
                 while ((line = rd.readLine()) != null) {
-                    //helloTextView.append(line);
+                    //stockage de la reponse
                     result=result.concat(line);
                     Log.d("test line",line);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return result;
         }
 
 
         protected void onPostExecute(String result) {
             Log.d("result",result);
-            helloTextView=(TextView)findViewById(R.id.text_view_id);
+            //modification du texte de l'activité
+            helloTextView=findViewById(R.id.text_view_id);
             helloTextView.setText(result);
         }
     }
