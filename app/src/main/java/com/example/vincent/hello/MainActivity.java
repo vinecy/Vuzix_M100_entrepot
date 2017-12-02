@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             //creation connexion au seveur
             //TODO généralisé le serveur grâce a URL
             HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet("http://www.bartholomeau.fr/test.php?test=ça_marche");
+            HttpGet request = new HttpGet("http://www.bartholomeau.fr/test.php?test=Vincent");
             HttpResponse response = null;
             String result;
 
