@@ -38,4 +38,21 @@ public class Utilisateur {
         //Todo: si existe => creer user sinon juste renvoyer false
         return false;
     }
+
+
+    /**
+     * Récupère le nom de l'utilisateur des lunettes
+     * @return le nom de l'utilisateur des lunettes ( String)
+     */
+    public String getNom() {
+        return nom;
+    }
+
+    /**
+     * Récupère le code barre de l'utilisateur des lunettes
+     * @return le code barre de l'utilisateur des lunettes ( String)
+     */
+    public String getCodeBarre() {
+        return codeBarre;
+    }
 }

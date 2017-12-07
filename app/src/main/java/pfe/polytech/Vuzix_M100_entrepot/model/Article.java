@@ -73,4 +73,61 @@ public class Article {
         return  quantiteDemande == quantitePrise;
     }
 
+
+    /**
+     * Récupère le nom de l'article
+     * @return le nom de l'article (String)
+     */
+    public String getNom() {
+        return nom;
+    }
+
+    /**
+     * Récupère le code barre de l'article
+     * @return le code barre de l'article (String)
+     */
+    public String getCodeBarre() {
+        return codeBarre;
+    }
+
+    /**
+     * Récupère l'allée de l'article
+     * @return l'allée de l'article (String)
+     */
+    public String getAllee() {
+        return allee;
+    }
+
+    /**
+     * Récupère l'étagére de l'allée de l'article
+     * @return  l'étagére de l'allée de l'article (String)
+     */
+    public String getEtagere() {
+        return etagere;
+    }
+
+    /**
+     * Récupère l'emplacement sur l'étagére de l'allée de l'article
+     * @return  l'emplacement sur l'étagére de l'allée de l'article (String)
+     */
+    public String getEmplacementEtagere() {
+        return emplacementEtagere;
+    }
+
+    /**
+     * Récupère la quantité souhaité de l'article dans la commande
+     * @return la quantité souhaité de l'article (Int)
+     */
+    public int getQuantiteDemande() {
+        return quantiteDemande;
+    }
+
+    /**
+     * Récupère la quantité prise de l'article pendant la réalisation de la commande
+     * @return la quantité prise de l'article disponible dans le "panier" (Int)
+     */
+    public int getQuantitePrise() {
+        return quantitePrise;
+    }
+
 }
