@@ -10,6 +10,10 @@ import static org.junit.Assert.assertEquals;
 
 public class ArticleTest {
 
+    /**
+     * Test des codes Barre
+     * @throws Exception
+     */
     @Test
     public void compareCodeBarreTest() throws Exception {
         Article test = new Article( "Machine","123456789", "A","5","102",2);
@@ -17,6 +21,10 @@ public class ArticleTest {
         assertEquals( false , test.compareCodeBarre( "1234567891"));
     }
 
+    /**
+     * Test des quantites
+     * @throws Exception
+     */
     @Test
     public void compareQuantiteTest() throws Exception {
         Article test = new Article( "Machine","123456789", "A","5","102",2);
