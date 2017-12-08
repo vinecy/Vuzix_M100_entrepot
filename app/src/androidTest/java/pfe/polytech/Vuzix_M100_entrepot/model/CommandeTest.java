@@ -8,7 +8,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by ju on 08/12/2017.
+ * Classe permettant de réaliser des tests sur les méthodes de la classe Commande
  */
 
 public class CommandeTest {
@@ -18,7 +18,7 @@ public class CommandeTest {
      * @throws Exception
      */
     @Test
-    public void compareCodeBarreTest() throws Exception {
+    public void articleSuivantTest() throws Exception {
         //Liste d'articles
         Article test1 = new Article( "Machine 1","123456789", "A","5","102",2);
         Article test2 = new Article( "Machine 2","15263", "A","5","103",1);
@@ -30,6 +30,7 @@ public class CommandeTest {
 
         // Utilisateur
         Utilisateur user = new Utilisateur( "Nom1","1111111111111");
+        //Commande
         Commande cmd = new Commande(1,list_article,"depot","entrepot A",user);
 
         // Test :
@@ -41,5 +42,62 @@ public class CommandeTest {
         assertEquals( test3.getCodeBarre() , cmd.ArticleSuivant().getCodeBarre());
         // Il n'y a plus d'articles, doit retourner null
         assertEquals( null , cmd.ArticleSuivant());
+    }
+
+    /**
+     * Test sur la fonction checkArticle
+     */
+    @Test
+    public void checkArticleTest(){
+        //Liste d'articles
+        Article test1 = new Article( "Machine 1","123456789", "A","5","102",2);
+        Article test2 = new Article( "Machine 2","15263", "A","5","103",1);
+        Article test3 = new Article( "Machine 3","15486532184", "A","5","105",5);
+        List< Article > list_article = new ArrayList< >();
+        list_article.add( test1);
+        list_article.add( test2);
+        list_article.add( test3);
+
+        // Utilisateur
+        Utilisateur user = new Utilisateur( "Nom1","1111111111111");
+        //Commande
+        Commande cmd = new Commande(1,list_article,"depot","entrepot A",user);
+
+        //Test sur le premier article:
+        assertEquals( true , cmd.checkArticle( "123456789"));
+        assertEquals( false , cmd.checkArticle( "1234"));
+        cmd.ArticleSuivant();
+        // Test sur le second
+        assertEquals( true , cmd.checkArticle( "15263"));
+        assertEquals( false , cmd.checkArticle( ""));
+    }
+
+
+    /**
+     * Test sur la fonction checkQuantite
+     */
+    @Test
+    public void checkQuantiteTest(){
+        //Liste d'articles
+        Article test1 = new Article( "Machine 1","123456789", "A","5","102",2);
+        Article test2 = new Article( "Machine 2","15263", "A","5","103",1);
+        Article test3 = new Article( "Machine 3","15486532184", "A","5","105",5);
+        List< Article > list_article = new ArrayList< >();
+        list_article.add( test1);
+        list_article.add( test2);
+        list_article.add( test3);
+
+        // Utilisateur
+        Utilisateur user = new Utilisateur( "Nom1","1111111111111");
+        //Commande
+        Commande cmd = new Commande(1,list_article,"depot","entrepot A",user);
+
+        //Test sur le premier article:
+        assertEquals( true , cmd.checkQuantite( 2));
+        assertEquals( false , cmd.checkQuantite( 0));
+        cmd.ArticleSuivant();
+        // Test sur le second
+        assertEquals( true , cmd.checkQuantite( 1));
+        assertEquals( false , cmd.checkQuantite( 5));
     }
 }

@@ -64,22 +64,24 @@ public class Commande {
     /**
      * Vérifie si l'article scanné par les lunette correspond à l'article courant.
      * @param codeBarre Code barre de l'article scanné par les lunettes
-     * @return un code (int) indiquant la situation de l'article:
-     *          0 : Il n'y a pas de problème, l'article est conforme en quantité et code barre,
-     *          1 : Le code barre ne correspond pas à l'article en cours de la commande,
-     *          2 : La quantité lié à l'article n'est pas celle souhaité. Un événement est envoyé au serveur.
+     * @return True s'il n'y a pas de problème, l'article est conforme ,
+     *         False si le code barre ne correspond pas à l'article en cours de la commande,
      */
     public boolean checkArticle( String codeBarre)
     {
-        //Todo: a faire (Justine) => pas oublier d'icrementer le ptr si OK ou si 2 + changer commentaires
-        return false;
+        return articleList.get( ptrArticleList).compareCodeBarre( codeBarre);
     }
 
 
+    /**
+     * Vérifie si la quantité demandé dans la commande pour l'article courant est la même que celle indiqué par l'utilisateur.
+     * @param quantite Quantité de l'artice pris par l'utilisateur
+     * @return True s'il n'y a pas de problème, l'a quantité de l'article courant est correcte
+     *         False si la quantité prise ne corespond pas à celle de l'article en cours de la commande,
+     */
     public boolean checkQuantite( int quantite)
     {
-        //Todo: a faire (Justine)
-        return false;
+        return articleList.get( ptrArticleList).compareQuantite( quantite);
     }
 
     /**
