@@ -23,6 +23,8 @@ public class Commande {
     private String entrepot;
     /** Identification du préparateur associé à cette commande*/
     private Utilisateur preparateur;
+
+
     /** Pointeur sur la liste d'articles. Permet d'obtenir le prochain article*/
     private int ptrArticleList;
 
@@ -67,11 +69,37 @@ public class Commande {
      *          1 : Le code barre ne correspond pas à l'article en cours de la commande,
      *          2 : La quantité lié à l'article n'est pas celle souhaité. Un événement est envoyé au serveur.
      */
-    public int checkArticle( String codeBarre)
+    public boolean checkArticle( String codeBarre)
     {
-        //Todo: a faire (Justine) => pas oublier d'icrementer le ptr si OK ou si 2
-        return 0;
+        //Todo: a faire (Justine) => pas oublier d'icrementer le ptr si OK ou si 2 + changer commentaires
+        return false;
     }
+
+
+    public boolean checkQuantite( int quantite)
+    {
+        //Todo: a faire (Justine)
+        return false;
+    }
+
+    /**
+     * Passe à l'article suivant dans la commande. Retourne l'article suivant.
+     * @return L'article suivant de la commande. S'il n'y a plus d'article, la fonction renvoit null.
+     */
+    public Article ArticleSuivant()
+    {
+        ptrArticleList ++;
+        // S'il reste des articles dans la commande
+        if(  ptrArticleList < articleList.size()) {
+            return articleList.get(ptrArticleList);
+
+        }
+        //Sinon, s'il n'y plus d'article à ajouter au "panier"
+        else {
+            return null;
+        }
+    }
+
 
 
     /**
@@ -149,6 +177,15 @@ public class Commande {
      */
     public Utilisateur getPreparateur() {
         return preparateur;
+    }
+
+
+    /**
+     * Récupére le pointeur sur la liste des articles
+     * @return le pointeur sur la liste des articles (int)
+     */
+    public int getPtrArticleList() {
+        return ptrArticleList;
     }
 
 
