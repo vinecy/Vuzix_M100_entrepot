@@ -1,4 +1,12 @@
 <resources>
+    <string name="a"></string>
+    <string name="any_user_finded">"Aucun utilisateur trouvé avec ce code barre. Veuillez réesayer"</string>
     <string name="app_name">Scan App</string>
-
+    <string name="search_user_pending">Recherche de l\'utilisateur en cours ...</string>
+    <string name="search_command_pending">Recherche d\'une commande en cours ...</string>
+    <string name="sign_in">S\'authentifier</string>
+    <string name="show_barcode_badge">Montrer le code barre de votre badge dans la zone encadrée en vert de la caméra de votre appareil</string>
+    <string name="show_barcode_product">Montrer le code barre du produit dans la zone encadrée en vert de la caméra de votre appareil</string>
+    <string name="user_finded">Utilisateur trouvé</string>
+    <string name="welcome">Bienvenue</string>
 </resources>

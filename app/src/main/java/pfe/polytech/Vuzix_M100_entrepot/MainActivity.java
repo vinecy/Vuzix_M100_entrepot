@@ -3,37 +3,32 @@
 package pfe.polytech.Vuzix_M100_entrepot;
 import com.google.zxing.*;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.LinearLayout;
-
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 
 //import com.vuzix.speech.VoiceControl;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-
+/**
+ * Enumère les differentes états de l'application
+ */
 enum App_State{
-    AUTHENTIFICATION,
-    AUTH_SCAN,
-    SEARCH_COMMAND,
-    NAVIGATION,
-    PRODUCT_SCAN,
-    QUANTITY_INPUT,
-    COMMAND_ENDED
+    INIT,                   // Au démarrage de l'application
+    SIGN_IN,                // Page de démarrage de l'applivation : invit à l'authentification
+    SCAN_USER,              // Ouverture de l'appareil de photo pour scanner le CB de l'utilisateur
+    SEARCH_USER,            // Recherche de l'utilisateur d'après le code barre
+    SEARCH_COMMAND,         // Page de chargement de la commande
+    NAVIGATION1,            // Boussole vers l'article
+    SCAN_PRODUCT,           // Ouverture de l'appareil de photo pour scanner le CB du produit
+    QUANTITY_INPUT,         // Clavier numérique pour la saisie de la quantité
+    NAVIGATION2,            // Boussole vers le dépot
+    COMMAND_ENDED,          // Soummision de la commande terminé + invit DESAUTH ou AGAIN
+    SIGN_OUT                // Desauthentification
 }
 
 /**
@@ -41,8 +36,19 @@ enum App_State{
  */
 public class MainActivity extends Activity implements ZXingScannerView.ResultHandler
 {
-    private App_State app_state = null;             // Etat de l'application
-    private ZXingScannerView zXingScannerView;      // Vue pour le scan du code-barre
+    // ATTRIBUTS
+    // Elements du MODELE
+
+
+    // Elements de la VUE
+    private ZXingScannerView zXingScannerView;      // IHM pour le scan du code-barre
+    private TextView username;                      // nom et prénom de l'utilisateur
+    private TextView actionPending;                // Action en cours
+
+    // Elements du CONTROLEUR
+    private App_State app_state = App_State.INIT;   // Etat de l'application
+    private String codeBarre_scanned = "";          // Code barre scanné
+    private TextView textview_ptr;
 
     /**
      * Fonction au lancement de l'application. Au lancement, on doit s'identifier en scannant le
@@ -51,47 +57,180 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app_state = App_State.AUTHENTIFICATION ;
-        setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.activity_main);
+        changeState(App_State.SIGN_IN);                             // Au demarrage, on est sur la page d'authentification
     }
 
     /**
-     * Fonction qui permet d'activer la caméra pour le scan d'un code barre pour s'identifier
-     * @param view
+     * Gestionnaire de resultat de l'application. Appeler lors le scan a trouvé un code barre.
+     * badge
      */
-    public void signIn(View view)
-    {
-        app_state = App_State.AUTH_SCAN ;
-        zXingScannerView =new ZXingScannerView(getApplicationContext());
-        setContentView(zXingScannerView);
-        zXingScannerView.setResultHandler(this);
-        zXingScannerView.startCamera();
+    @Override
+    public void handleResult(Result result) {
+        zXingScannerView.resumeCameraPreview(this);
+        zXingScannerView.stopCamera();
+        codeBarre_scanned = result.getText();
+        Toast.makeText(getApplicationContext(),"Code Barre : " + codeBarre_scanned,Toast.LENGTH_SHORT).show();
+        switch (app_state) {
+            case SCAN_USER:
+                changeState(App_State.SEARCH_USER);
+                break;
+            case SCAN_PRODUCT:
+                changeState(App_State.NAVIGATION1);
+                break;
+        }
     }
 
     /**
-     * Fonction qui permet d'activer la caméra pour le scan d'un code barre pour identifier
-     * le produit
+     * Fonction qui permet de changer et effectue les traitements nécessaires correspondant
+     * @param a
+     */
+    public void changeState(App_State a){
+        app_state = a;
+        switch (a) {
+            case INIT:
+                codeBarre_scanned = "";
+                username.setText("");
+                actionPending.setText("");
+            case SIGN_IN:
+                setContentView(R.layout.activity_main);
+                break;
+            case SCAN_USER:
+                codeBarre_scanned = "";
+                Toast.makeText(getApplicationContext(), R.string.show_barcode_badge,Toast.LENGTH_SHORT).show();
+                break;
+            case SCAN_PRODUCT:
+                codeBarre_scanned = "";
+                Toast.makeText(getApplicationContext(), R.string.show_barcode_product,Toast.LENGTH_SHORT).show();
+                break;
+            case SEARCH_USER:
+                //Toast.makeText(getApplicationContext(), R.string.search_user_pending,Toast.LENGTH_SHORT).show();
+                if( searchUser(codeBarre_scanned) ){
+                    changeState(App_State.SEARCH_COMMAND);
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.any_user_finded,Toast.LENGTH_SHORT).show();
+                    changeState(App_State.SCAN_USER);
+                    restartCamera();
+                }
+                break;
+            case SEARCH_COMMAND:
+                Toast.makeText(getApplicationContext(), R.string.search_command_pending,Toast.LENGTH_SHORT).show();
+                setContentView(R.layout.command_coming);
+                textview_ptr = (TextView) findViewById(R.id.username);
+                // TODO : mettre nom et prenom de l'utilisateur dans username si trouvé
+                textview_ptr.setText("John Smith");
+                textview_ptr = (TextView) findViewById(R.id.actionPending);
+                textview_ptr.setText(R.string.search_command_pending);
+                searchCommand();
+                break;
+
+
+
+
+            case NAVIGATION1:
+                setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
+                break;
+
+            case QUANTITY_INPUT:
+                setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.quantity);
+                break;
+            case NAVIGATION2:
+                setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
+                break;
+            case COMMAND_ENDED:
+                break;
+            case SIGN_OUT:
+                break;
+            default:
+                System.out.println(" > MainActivity.changeState() : Bad case or case unknown ");
+                break;
+        }
+    }
+
+    /**
+     * Fonction qui permet d'activer la caméra pour le scan d'un code barre
      * @param view
      */
     public void scan(View view)
     {
-        app_state = App_State.PRODUCT_SCAN ;
-        zXingScannerView =new ZXingScannerView(getApplicationContext());
-        setContentView(zXingScannerView);
-        zXingScannerView.setResultHandler(this);
-        zXingScannerView.startCamera();
+        switch (app_state){
+            case SIGN_IN:                               // si on vient de la page d'authentification
+                changeState(App_State.SCAN_USER);       // on doit scanner le code barre d'un utilisateur
+                break;
+            case NAVIGATION1:                           // so on vient de la page de navigation
+                changeState(App_State.SCAN_PRODUCT);    // on doit scanner le code barre d'un produit
+                break;
+        }
+        startCamera();
+    }
+
+    public void startCamera(){
+        zXingScannerView =new ZXingScannerView(getApplicationContext());    // création de la vue scanner ZXing
+        zXingScannerView.setResultHandler(this);                            // gestion du resultat par handleResult() de cette classe
+        zXingScannerView.startCamera();                                     // caméra allumé
+        setContentView(zXingScannerView);                                   // changement de vue
+    }
+    public void restartCamera(){
+        zXingScannerView.startCamera();                                     // caméra allumé
+    }
+    public void stopCamera(){
+        zXingScannerView.stopCamera();
+    }
+
+
+    public boolean searchUser(String codeBarre_scanned){
+        boolean finded = true;
+        // TODO : appel de la fonction de recherche de l'utilisateur avec le code barre en paramètre
+        // ...
+        return finded;
     }
 
     public void searchCommand(){
-        app_state = App_State.SEARCH_COMMAND ;
-        setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.command_coming);
-        //TODO: CHERCHER LA COMMANDE SUR LE SERVEUR
+        // TODO : appel de la fonction de recherche d'une commande avec le code barre en paramètre
         // ...
-        //TODO: TRACER LA NAVIGATION
-        // ...
-        //TODO: SWITCHER SUR LE DISPLAY NAVIGATION
-        // ...
+        // en attendant, la récupération réussie d'une commande est enclenche par le bouton ok de la vue command_comming
     }
+
+    /**
+     * Fonction qui permet de revenir à l'état précedent et effectue les traitements nécessaires correspondant
+     */
+    public void cancel(View view){
+        onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed(){
+        switch (app_state) {
+            case SIGN_IN:
+                onStop();
+                onDestroy();
+                break;
+            case SEARCH_COMMAND:
+                changeState(App_State.SIGN_IN);
+            case SCAN_USER:
+                stopCamera();
+                changeState(App_State.SIGN_IN);
+                break;
+            case SCAN_PRODUCT:
+                stopCamera();
+                changeState(App_State.NAVIGATION1);
+                break;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Fonction lorsqu'on sort de l'application en cours vers une autre appli smartphone
@@ -100,14 +239,16 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
     protected void onPause() {
         super.onPause();
         switch (app_state){
-            case AUTH_SCAN:                         // si on quitte l'appli en cours de scan
+            case SCAN_USER:                         // si on quitte l'appli en cours de scan
                 zXingScannerView.stopCamera();      // alors on arrete la camera
                 break;
-            case PRODUCT_SCAN:                      // si on quitte l'appli en cours de scan
+            case SCAN_PRODUCT:                      // si on quitte l'appli en cours de scan
                 zXingScannerView.stopCamera();      // alors on arrete la camera
                 break;
         }
     }
+
+
 
     /**
      * Fonction lorsqu'on revient sur l'application en cours
@@ -116,10 +257,10 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
     protected void onResume(){
         super.onResume();
         switch (app_state){
-            case AUTH_SCAN:                         // si on quitte l'appli en cours de scan
+            case SCAN_USER:                         // si on quitte l'appli en cours de scan
                 zXingScannerView.startCamera();     // alors on arrete la camera
                 break;
-            case PRODUCT_SCAN:                      // si on quitte l'appli en cours de scan
+            case SCAN_PRODUCT:                      // si on quitte l'appli en cours de scan
                 zXingScannerView.startCamera();     // alors on arrete la camera
                 break;
         }
@@ -132,32 +273,17 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
     protected void onRestart(){
         super.onRestart();
         switch (app_state){
-            case AUTH_SCAN:                         // si on quitte l'appli en cours de scan
+            case SCAN_USER:                         // si on quitte l'appli en cours de scan
                 zXingScannerView.startCamera();     // alors on arrete la camera
                 break;
-            case PRODUCT_SCAN:                      // si on quitte l'appli en cours de scan
+            case SCAN_PRODUCT:                      // si on quitte l'appli en cours de scan
                 zXingScannerView.startCamera();     // alors on arrete la camera
                 break;
         }
     }
 
-    @Override
-    public void handleResult(Result result) {
-        zXingScannerView.resumeCameraPreview(this);
-        zXingScannerView.stopCamera();
-        Toast.makeText(getApplicationContext(),"Code Barre : " + result.getText(),Toast.LENGTH_SHORT).show();
-        switch (app_state) {
-            case AUTH_SCAN:
-                searchCommand();
-                break;
-            case PRODUCT_SCAN:
-                //TODO: gerer le resultat du scan
-                // ...
-                break;
-            default:
-                app_state = App_State.AUTHENTIFICATION ;
-                setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.activity_main);
-                break;
-        }
-    }
+
+
+
+
 }
