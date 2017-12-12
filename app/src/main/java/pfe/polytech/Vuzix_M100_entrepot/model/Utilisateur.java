@@ -1,5 +1,7 @@
 package pfe.polytech.Vuzix_M100_entrepot.model;
 
+import pfe.polytech.Vuzix_M100_entrepot.Connexionasync;
+
 /**
  * Cette classe correspond à un utilisateur des lunettes.
  *
@@ -32,11 +34,22 @@ public class Utilisateur {
      * @param codeBarreLunette code barre vu par les lunettes
      * @return True si l'utilisateur existe, false sinon.
      */
-    public static boolean verifieUtilisateur( String codeBarreLunette)
+    public  boolean verifieUtilisateur( String codeBarreLunette)
     {
-        //Todo: Faire la verification via le serveur (Pour Vincent)
-        //Todo: si existe => creer user sinon juste renvoyer false
-        return false;
+        Connexionasync connexion = new Connexionasync();
+        connexion.execute("htpp://bartholomeau.fr/identification.php?cb="+codeBarreLunette);
+        if(connexion.getResult().equals("false"))
+        {
+            return false;
+        }
+        else
+        {
+            //position de la premiere virgule
+            int index1 = connexion.getResult().indexOf(",");
+            this.nom=connexion.getResult().substring(0,index1);
+            this.codeBarre=connexion.getResult().substring(index1);
+            return true;
+        }
     }
 
 
