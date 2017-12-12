@@ -13,6 +13,8 @@ import android.widget.Toast;
 //import com.vuzix.speech.VoiceControl;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import pfe.polytech.Vuzix_M100_entrepot.model.Commande;
+import pfe.polytech.Vuzix_M100_entrepot.model.Utilisateur;
 
 /**
  * Enumère les differentes états de l'application
@@ -38,6 +40,8 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
 {
     // ATTRIBUTS
     // Elements du MODELE
+    private Utilisateur user;
+    private Commande commande;
 
 
     // Elements de la VUE
@@ -104,7 +108,7 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 break;
             case SEARCH_USER:
                 //Toast.makeText(getApplicationContext(), R.string.search_user_pending,Toast.LENGTH_SHORT).show();
-                if( searchUser(codeBarre_scanned) ){
+                if( user.verifieUtilisateur(codeBarre_scanned) ){
                     changeState(App_State.SEARCH_COMMAND);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.any_user_finded,Toast.LENGTH_SHORT).show();
@@ -120,7 +124,14 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 textview_ptr.setText("John Smith");
                 textview_ptr = (TextView) findViewById(R.id.actionPending);
                 textview_ptr.setText(R.string.search_command_pending);
-                searchCommand();
+                if(!(commande.chargerCommande(user).toString().equals("{false}")))
+                {
+                    changeState(App_State.NAVIGATION1);
+                }
+                else
+                {
+                    changeState(App_State.SIGN_IN);
+                }
                 break;
 
 
@@ -177,18 +188,6 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
     }
 
 
-    public boolean searchUser(String codeBarre_scanned){
-        boolean finded = true;
-        // TODO : appel de la fonction de recherche de l'utilisateur avec le code barre en paramètre
-        // ...
-        return finded;
-    }
-
-    public void searchCommand(){
-        // TODO : appel de la fonction de recherche d'une commande avec le code barre en paramètre
-        // ...
-        // en attendant, la récupération réussie d'une commande est enclenche par le bouton ok de la vue command_comming
-    }
 
     /**
      * Fonction qui permet de revenir à l'état précedent et effectue les traitements nécessaires correspondant
