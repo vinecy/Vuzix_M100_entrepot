@@ -1,8 +1,12 @@
 package pfe.polytech.Vuzix_M100_entrepot.model;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
+
+import pfe.polytech.Vuzix_M100_entrepot.Connexionasync;
 
 /**
  * Cette classe correspond à une commande.
@@ -53,11 +57,25 @@ public class Commande {
      * Récupère la commande (JSON) depuis le serveur.
      * @param preparateurBdd l'utilisateur des lunettes
      * @return La commande sous un format JSON
-     * TODO: (Pour Vincent) : verifier si objet Json = OK, puis ajouter la recupération de la commande via le serveur
      * TODO: + verif que ya pas d'evenement pour cette commande
      */
     public JSONArray chargerCommande( Utilisateur preparateurBdd)
     {
+        Connexionasync connexion = new Connexionasync();
+        connexion.execute("htpp://bartholomeau.fr/recevoircommande.php?cb="+preparateurBdd.getCodeBarre());
+        if( connexion.getResult().substring(0,1).equals("i"))
+        {
+            //TODO: remplissage de commande et article avec le connexion.getResult()
+        }
+        else
+        {
+            try {
+                return new JSONArray("false");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        // la commande est contenue dans connexion.getResult()
         return null;
     }
 
