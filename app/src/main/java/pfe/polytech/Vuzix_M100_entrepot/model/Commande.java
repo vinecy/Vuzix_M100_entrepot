@@ -1,6 +1,8 @@
 package pfe.polytech.Vuzix_M100_entrepot.model;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -61,6 +63,12 @@ public class Commande {
         return null;
     }
 
+    public Commande JsonToCmd( String json) throws JSONException {
+        JSONObject jsonObj = new JSONObject(json.toString());
+        System.out.println(" JSON "+ jsonObj);
+        return null;
+    }
+
     /**
      * Vérifie si l'article scanné par les lunette correspond à l'article courant.
      * @param codeBarre Code barre de l'article scanné par les lunettes
@@ -76,8 +84,8 @@ public class Commande {
     /**
      * Vérifie si la quantité demandé dans la commande pour l'article courant est la même que celle indiqué par l'utilisateur.
      * @param quantite Quantité de l'artice pris par l'utilisateur
-     * @return True s'il n'y a pas de problème, l'a quantité de l'article courant est correcte
-     *         False si la quantité prise ne corespond pas à celle de l'article en cours de la commande,
+     * @return True s'il n'y a pas de problème, l'a quantité de l'article courant est correcte,
+     *         False si la quantité prise ne corespond pas à celle de l'article en cours de la commande
      */
     public boolean checkQuantite( int quantite)
     {
