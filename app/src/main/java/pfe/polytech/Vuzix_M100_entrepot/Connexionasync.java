@@ -12,6 +12,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 
 /**
  * Created by Vincent on 12/12/2017.
@@ -21,6 +22,10 @@ public class Connexionasync extends AsyncTask<String, Integer, String> {
 
       String result;
 
+    public Connexionasync() {
+        result="";
+    }
+
     /**
      * Récupère le resultat de la requete
      * @return le resultat de la requete ( String)
@@ -29,14 +34,16 @@ public class Connexionasync extends AsyncTask<String, Integer, String> {
         return result;
     }
 
-    protected static String doInBackground(String adress) {
+    @Override
+    protected  String doInBackground(String... adress) {
+
+        Log.d("tag", "adress "+adress[0]);
 
         //creation connexion au seveur
         //TODO généraliser le serveur grâce a URL
         HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet(adress);
+        HttpGet request = new HttpGet(adress[0]);
         HttpResponse response = null;
-        String result;
 
         try {
             //connexion
@@ -57,22 +64,22 @@ public class Connexionasync extends AsyncTask<String, Integer, String> {
         }
 
         String line ;
-        result = "";
         try {
             assert rd != null;
             while ((line = rd.readLine()) != null) {
                 //stockage de la reponse
-                result=result.concat(line);
+                this.result=this.result.concat(line);
                 Log.d("test line",line);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result;
+        return this.result;
     }
-
     @Override
-    protected String doInBackground(String... strings) {
-        return null;
+    protected void onPostExecute(String result) {
+        Log.d("result",result);
+        //modification du texte de l'activité
+       // helloTextView.setText(result);
     }
 }

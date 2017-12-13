@@ -1,5 +1,9 @@
 package pfe.polytech.Vuzix_M100_entrepot.model;
 
+import android.util.Log;
+
+import java.util.concurrent.ExecutionException;
+
 import pfe.polytech.Vuzix_M100_entrepot.Connexionasync;
 
 /**
@@ -37,7 +41,14 @@ public class Utilisateur {
     public static Utilisateur verifieUtilisateur( String codeBarreLunette)
     {
         Connexionasync connexion = new Connexionasync();
-        connexion.execute("htpp://bartholomeau.fr/identification.php?cb="+codeBarreLunette);
+        connexion.execute("http://bartholomeau.fr/indentification.php?cb="+codeBarreLunette);
+        try {
+            Log.d("utilisateur","message "+connexion.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         if(connexion.getResult().equals("false"))
         {
             return null;
