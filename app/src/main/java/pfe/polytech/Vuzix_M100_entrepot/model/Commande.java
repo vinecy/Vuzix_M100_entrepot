@@ -69,6 +69,7 @@ public class Commande {
     public static Commande chargerCommande( Utilisateur preparateurBdd) throws JSONException {
         Connexionasync connexion = new Connexionasync();
         connexion.execute("htpp://bartholomeau.fr/recevoircommande.php?cb=" + preparateurBdd.getCodeBarre());
+        //Si une commande a été envoyé
         if (!connexion.getResult().substring(0, 1).equals("i")) {
             String ARTICLE_JSON_KEY = "Article";
             // Transforme le string en Json
@@ -104,7 +105,6 @@ public class Commande {
         } else {
             return null;
         }
-
     }
 
     /**
