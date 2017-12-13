@@ -109,6 +109,9 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 break;
             case SEARCH_USER:
                 Toast.makeText(getApplicationContext(), R.string.search_user_pending,Toast.LENGTH_SHORT).show();
+                setContentView(R.layout.command_coming);
+                textview_ptr = findViewById(R.id.actionPending);
+                textview_ptr.setText(R.string.search_user_pending);
                 user = Utilisateur.verifieUtilisateur(codeBarre_scanned);
                 //user = new Utilisateur("John Smith", "1578415156456");
                 if( user != null ){
