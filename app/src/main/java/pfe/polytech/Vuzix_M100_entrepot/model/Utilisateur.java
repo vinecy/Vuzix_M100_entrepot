@@ -26,6 +26,15 @@ public class Utilisateur {
         codeBarre = CodeBarreUser;
     }
 
+    /**
+     * Constructeur de la classe Utilisateur par défaut
+     */
+    public Utilisateur( )
+    {
+        nom = null;
+        codeBarre = null;
+    }
+
 
     /**
      * Vérifie dans la base de données si l'utilisateur existe via son code barre.
@@ -34,7 +43,7 @@ public class Utilisateur {
      * @param codeBarreLunette code barre vu par les lunettes
      * @return True si l'utilisateur existe, false sinon.
      */
-    public  boolean verifieUtilisateur( String codeBarreLunette)
+    public boolean verifieUtilisateur( String codeBarreLunette)
     {
         Connexionasync connexion = new Connexionasync();
         connexion.execute("htpp://bartholomeau.fr/identification.php?cb="+codeBarreLunette);
