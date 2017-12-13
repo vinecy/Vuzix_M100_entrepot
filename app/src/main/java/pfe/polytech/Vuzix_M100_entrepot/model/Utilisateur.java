@@ -57,7 +57,7 @@ public class Utilisateur {
         {
             //position de la premiere virgule
             int index1 = connexion.getResult().indexOf(",");
-            Utilisateur user = new Utilisateur(connexion.getResult().substring(0,index1),connexion.getResult().substring(index1));
+            Utilisateur user = new Utilisateur(connexion.getResult().substring(0,index1),connexion.getResult().substring(index1+1));
             return user;
         }
     }

@@ -126,14 +126,14 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 textview_ptr.setText(user.getNom());
                 textview_ptr = findViewById(R.id.actionPending);
                 textview_ptr.setText(R.string.search_command_pending);
-               // try {
-                    //commande = Commande.chargerCommande(user);
-                    ArrayList<Article> liste = new ArrayList<>();
-                    Article a1 = new Article("Fromage Blanc","2154632156234","A","26","C",1);
-                    Article a2 = new Article("Pizza","2145622145659","B","27","D",1);
-                    liste.add(a1);
-                    liste.add(a2);
-                    commande = new Commande(13,liste,"dqsfqsf","qfqsf",user);
+                try {
+                    commande = Commande.chargerCommande(user);
+                    //ArrayList<Article> liste = new ArrayList<>();
+                    //Article a1 = new Article("Fromage Blanc","2154632156234","A","26","C",1);
+                    //Article a2 = new Article("Pizza","2145622145659","B","27","D",1);
+                    //liste.add(a1);
+                    //liste.add(a2);
+                    //commande = new Commande(13,liste,"dqsfqsf","qfqsf",user);
                     if( commande != null)
                     {
                         changeState(App_State.NAVIGATION1);
@@ -142,10 +142,10 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                     {
                         Toast.makeText(getApplicationContext(), R.string.any_command_find, Toast.LENGTH_SHORT).show();
                         changeState(App_State.SIGN_IN);
-                    }/*
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
                 break;
             case NAVIGATION1:
                 setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
