@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pfe.polytech.Vuzix_M100_entrepot.Connexionasync;
@@ -33,6 +34,12 @@ public class Commande {
     private int ptrArticleList;
 
 
+    /** Clef du fichier JSON renvoyé par le serveur*/
+    private static final String ID_CMD_JSON_KEY = "Idcommande";
+    private static final String DEPOT_JSON_KEY = "Depot";
+    private static final String ENTREPOT_JSON_KEY = "Entrepot";
+
+
     /**
      * Constructeur d'une commande.
      * Le pointeur sur la lsite d'article est initilisé à zéros.
@@ -59,30 +66,45 @@ public class Commande {
      * @return La commande sous un format JSON
      * TODO: + verif que ya pas d'evenement pour cette commande
      */
-    public JSONArray chargerCommande( Utilisateur preparateurBdd)
-    {
+    public Commande chargerCommande( Utilisateur preparateurBdd) throws JSONException {
         Connexionasync connexion = new Connexionasync();
-        connexion.execute("htpp://bartholomeau.fr/recevoircommande.php?cb="+preparateurBdd.getCodeBarre());
-        if( connexion.getResult().substring(0,1).equals("i"))
-        {
-            //TODO: remplissage de commande et article avec le connexion.getResult()
-        }
-        else
-        {
-            try {
-                return new JSONArray("false");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        // la commande est contenue dans connexion.getResult()
-        return null;
-    }
+        connexion.execute("htpp://bartholomeau.fr/recevoircommande.php?cb=" + preparateurBdd.getCodeBarre());
+        if (!connexion.getResult().substring(0, 1).equals("i")) {
+            String ARTICLE_JSON_KEY = "Article";
+            // Transforme le string en Json
+            JSONObject jsonObj = new JSONObject(connexion.getResult());
+            // Récupère les données
+            String idCmd = jsonObj.getString(ID_CMD_JSON_KEY);
+            String depot = jsonObj.getString(DEPOT_JSON_KEY);
+            String ent = jsonObj.getString(ENTREPOT_JSON_KEY);
 
-    public Commande JsonToCmd( String json) throws JSONException {
-        JSONObject jsonObj = new JSONObject(json.toString());
-        System.out.println(" JSON "+ jsonObj);
-        return null;
+            //Creation de la liste d'article
+            List<Article> list_article = new ArrayList<>();
+            boolean keyExiste = true;
+            int nb = 1;
+            // Clef JSON du premier article
+            String nbArticle = ARTICLE_JSON_KEY + Integer.toString(nb);
+            // Parcours tout les articles tant qu'il y en a
+            while (keyExiste) {
+                // Récupère le JSON d'un article
+                JSONObject jsonArticle = new JSONObject(jsonObj.getString(nbArticle));
+                // Creer l'article correspondant
+                Article article = new Article(jsonArticle.getString("nom"), jsonArticle.getString("nbcpdebarre"), jsonArticle.getString("allee"), jsonArticle.getString("etagere"), jsonArticle.getString("emplacement"), Integer.parseInt(jsonArticle.getString("quantite")));
+                // Ajoute cette article à la liste
+                list_article.add(article);
+                // Passe à l'article suivant
+                nb++;
+                nbArticle = ARTICLE_JSON_KEY + Integer.toString(nb);
+                // Vérifie si cette article existe (false sinon)
+                keyExiste = jsonObj.has(nbArticle);
+            }
+            // Creation de la commande
+            Commande cmd = new Commande(Integer.parseInt(idCmd), list_article, depot, ent, preparateurBdd);
+            return cmd;
+        } else {
+            return null;
+        }
+
     }
 
     /**

@@ -112,44 +112,7 @@ public class CommandeTest {
                 "\"Depot\":\"Entrepot X _ etagere B\"," +
                 "\"Entrepot\":\"FROID\"}";
 
-        final String ID_CMD_JSON_KEY = "Idcommande"; //TODO: deplacer la fonction et la mettre static et private
-        final String DEPOT_JSON_KEY = "Depot";
-        final String ENTREPOT_JSON_KEY = "Entrepot";
-        String ARTICLE_JSON_KEY = "Article";
 
-        // Transforme le string en Json
-        JSONObject jsonObj = new JSONObject(json.toString());
-
-        // Récupère les données
-        String idCmd = jsonObj.getString( ID_CMD_JSON_KEY);
-        String depot = jsonObj.getString( DEPOT_JSON_KEY);
-        String ent = jsonObj.getString( ENTREPOT_JSON_KEY);
-
-        //Creation de la liste d'article
-        List< Article > list_article = new ArrayList< >();
-        boolean keyExiste = true;
-        int nb = 1;
-        // Clef JSON du premier article
-        String nbArticle = ARTICLE_JSON_KEY + Integer.toString(nb);
-        // Parcours tout les articles tant qu'il y en a
-        while( keyExiste)
-        {
-            // Récupère le JSON d'un article
-            JSONObject jsonArticle = new JSONObject( jsonObj.getString(nbArticle));
-            // Creer l'article correspondant
-            Article article = new Article( jsonArticle.getString("nom"), jsonArticle.getString("nbcpdebarre"), jsonArticle.getString("allee"), jsonArticle.getString("etagere"), jsonArticle.getString("emplacement"), Integer.parseInt( jsonArticle.getString("quantite")) );
-            // Ajoute cette article à la liste
-            list_article.add( article);
-            // Passe à l'article suivant
-            nb ++;
-            nbArticle = ARTICLE_JSON_KEY + Integer.toString(nb);
-            // Vérifie si cette article existe (false sinon)
-            keyExiste = jsonObj.has( nbArticle);
-        }
-
-        // Creation de la commande
-        //TODO: remplacer dans la fonction charger commande le code barre par l'objet utilisateur!!!!!
-        Commande cmd = new Commande( Integer.parseInt( idCmd),list_article,depot,ent,null);
 
         //System.out.println(" CMD ::::: id= " + cmd.getId() + " depot " + cmd.getDepot()  + " user  " + cmd.getPreparateur() + " ent " + cmd.getEntrepot());
 
