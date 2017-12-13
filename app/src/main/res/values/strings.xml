@@ -10,8 +10,8 @@
     <string name="pull_in_cart">Mis dans le panier !</string>
     <string name="rack">Etagère</string>
     <string name="rack_location">Emplacement étagère</string>
-    <string name="search_user_pending">Recherche de l\'utilisateur en cours ...</string>
-    <string name="search_command_pending">Recherche d\'une commande en cours ...</string>
+    <string name="search_user_pending">Recherche de l\'utilisateur en cours …</string>
+    <string name="search_command_pending">Recherche d\'une commande en cours …</string>
     <string name="sign_in">S\'authentifier</string>
     <string name="sign_out">Se desauthentifier</string>
     <string name="show_barcode_badge">Montrer le code barre de votre badge dans la zone encadrée en vert de la caméra de votre appareil</string>
