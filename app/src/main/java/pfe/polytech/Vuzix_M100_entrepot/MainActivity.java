@@ -157,6 +157,8 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 textview_ptr.setText(commande.getArticleCourrant().getEtagere());
                 textview_ptr = findViewById(R.id.product_rack_location);
                 textview_ptr.setText(commande.getArticleCourrant().getEmplacementEtagere());
+                textview_ptr = findViewById(R.id.username);
+                textview_ptr.setText(user.getNom());
                 break;
             case SEARCH_PRODUCT:
                 if( commande.checkArticle(codeBarre_scanned) ) {
