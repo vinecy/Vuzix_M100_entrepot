@@ -13,6 +13,8 @@ import android.widget.Toast;
 //import com.vuzix.speech.VoiceControl;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import pfe.polytech.Vuzix_M100_entrepot.model.Commande;
+import pfe.polytech.Vuzix_M100_entrepot.model.Utilisateur;
 
 /**
  * Enumère les differentes états de l'application
@@ -25,6 +27,7 @@ enum App_State{
     SEARCH_COMMAND,         // Page de chargement de la commande
     NAVIGATION1,            // Boussole vers l'article
     SCAN_PRODUCT,           // Ouverture de l'appareil de photo pour scanner le CB du produit
+    SEARCH_PRODUCT,         // Recherche de l'article via le code-barre
     QUANTITY_INPUT,         // Clavier numérique pour la saisie de la quantité
     NAVIGATION2,            // Boussole vers le dépot
     COMMAND_ENDED,          // Soummision de la commande terminé + invit DESAUTH ou AGAIN
@@ -38,12 +41,11 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
 {
     // ATTRIBUTS
     // Elements du MODELE
-
+    private Utilisateur user;
+    private Commande commande;
 
     // Elements de la VUE
     private ZXingScannerView zXingScannerView;      // IHM pour le scan du code-barre
-    private TextView username;                      // nom et prénom de l'utilisateur
-    private TextView actionPending;                // Action en cours
 
     // Elements du CONTROLEUR
     private App_State app_state = App_State.INIT;   // Etat de l'application
@@ -75,22 +77,20 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 changeState(App_State.SEARCH_USER);
                 break;
             case SCAN_PRODUCT:
-                changeState(App_State.NAVIGATION1);
+                changeState(App_State.SEARCH_PRODUCT);
                 break;
         }
     }
 
     /**
      * Fonction qui permet de changer et effectue les traitements nécessaires correspondant
-     * @param a
+     * @param a nouvelle état de l'application
      */
     public void changeState(App_State a){
         app_state = a;
         switch (a) {
             case INIT:
                 codeBarre_scanned = "";
-                username.setText("");
-                actionPending.setText("");
             case SIGN_IN:
                 setContentView(R.layout.activity_main);
                 break;
@@ -103,8 +103,8 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 Toast.makeText(getApplicationContext(), R.string.show_barcode_product,Toast.LENGTH_SHORT).show();
                 break;
             case SEARCH_USER:
-                //Toast.makeText(getApplicationContext(), R.string.search_user_pending,Toast.LENGTH_SHORT).show();
-                if( searchUser(codeBarre_scanned) ){
+                Toast.makeText(getApplicationContext(), R.string.search_user_pending,Toast.LENGTH_SHORT).show();
+                if( user.verifieUtilisateur(codeBarre_scanned) ){
                     changeState(App_State.SEARCH_COMMAND);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.any_user_finded,Toast.LENGTH_SHORT).show();
@@ -115,30 +115,67 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
             case SEARCH_COMMAND:
                 Toast.makeText(getApplicationContext(), R.string.search_command_pending,Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.command_coming);
-                textview_ptr = (TextView) findViewById(R.id.username);
-                // TODO : mettre nom et prenom de l'utilisateur dans username si trouvé
-                textview_ptr.setText("John Smith");
-                textview_ptr = (TextView) findViewById(R.id.actionPending);
+                textview_ptr = findViewById(R.id.username);
+                textview_ptr.setText(user.getNom().toString());
+                textview_ptr = findViewById(R.id.actionPending);
                 textview_ptr.setText(R.string.search_command_pending);
-                searchCommand();
+                if(!(commande.chargerCommande(user).toString().equals("{false}")))
+                {
+                    changeState(App_State.NAVIGATION1);
+                }
+                else
+                {
+                    changeState(App_State.SIGN_IN);
+                }
                 break;
-
-
-
-
             case NAVIGATION1:
                 setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
+                textview_ptr = findViewById(R.id.product_name);
+                textview_ptr.setText(commande.getArticleCourrant().getNom());
+                textview_ptr = findViewById(R.id.product_aisle);
+                textview_ptr.setText(commande.getArticleCourrant().getAllee());
+                textview_ptr = findViewById(R.id.product_aisle);
+                textview_ptr.setText(commande.getArticleCourrant().getEtagere());
+                textview_ptr = findViewById(R.id.product_aisle);
+                textview_ptr.setText(commande.getArticleCourrant().getEmplacementEtagere());
                 break;
-
+            case SEARCH_PRODUCT:
+                if( commande.checkArticle(codeBarre_scanned) ) {
+                    changeState(App_State.SEARCH_COMMAND);
+                    if (commande.getArticleCourrant().getQuantiteDemande() > 1) {
+                        // temporairement
+                        //TODO (pour val) : gestion d'un produit en plusieurs exemplaires
+                        // commande.checkQuantite(commande.getArticleCourrant().getQuantiteDemande())
+                        // changeState(App_State.QUANTITY_INPUT);
+                        // fin temporairement
+                    }
+                    if ( commande.ArticleSuivant() != null) {
+                        Toast.makeText(getApplicationContext(), R.string.pull_in_cart, Toast.LENGTH_SHORT).show();
+                        changeState(App_State.NAVIGATION1);
+                    } else {
+                        changeState(App_State.NAVIGATION2);
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.any_product_finded, Toast.LENGTH_SHORT).show();
+                    changeState(App_State.SCAN_PRODUCT);
+                    restartCamera();
+                }
+                break;
             case QUANTITY_INPUT:
                 setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.quantity);
                 break;
             case NAVIGATION2:
-                setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
+                // TODO (pour val) : ecran navigation pour le depot
+                //setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
+                changeState(App_State.COMMAND_ENDED);
                 break;
             case COMMAND_ENDED:
+                setContentView(R.layout.command_ended);
                 break;
             case SIGN_OUT:
+                // TODO : gérer la déconnection
+                Toast.makeText(getApplicationContext(), "Good Bye" + user.getNom(), Toast.LENGTH_SHORT).show();
+                changeState(App_State.SIGN_IN);
                 break;
             default:
                 System.out.println(" > MainActivity.changeState() : Bad case or case unknown ");
@@ -148,7 +185,7 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
 
     /**
      * Fonction qui permet d'activer la caméra pour le scan d'un code barre
-     * @param view
+     * @param view vue sur laquelle cette méthode a été appelée
      */
     public void scan(View view)
     {
@@ -174,20 +211,6 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
     }
     public void stopCamera(){
         zXingScannerView.stopCamera();
-    }
-
-
-    public boolean searchUser(String codeBarre_scanned){
-        boolean finded = true;
-        // TODO : appel de la fonction de recherche de l'utilisateur avec le code barre en paramètre
-        // ...
-        return finded;
-    }
-
-    public void searchCommand(){
-        // TODO : appel de la fonction de recherche d'une commande avec le code barre en paramètre
-        // ...
-        // en attendant, la récupération réussie d'une commande est enclenche par le bouton ok de la vue command_comming
     }
 
     /**
@@ -217,7 +240,17 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
         }
     }
 
+    public void nextStep(View view){
+        switch (app_state) {
+            case SEARCH_COMMAND:
+                changeState(App_State.NAVIGATION1);
+                break;
+        }
+    }
 
+    public void newCommand(View view){ changeState(App_State.SEARCH_COMMAND);}
+
+    public void signOut(View view){ changeState(App_State.SIGN_OUT);}
 
 
 
