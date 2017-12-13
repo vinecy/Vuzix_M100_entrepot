@@ -123,7 +123,7 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 Toast.makeText(getApplicationContext(), R.string.search_command_pending,Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.command_coming);
                 textview_ptr = findViewById(R.id.username);
-                textview_ptr.setText(user.getNom().toString());
+                textview_ptr.setText(user.getNom());
                 textview_ptr = findViewById(R.id.actionPending);
                 textview_ptr.setText(R.string.search_command_pending);
                // try {
