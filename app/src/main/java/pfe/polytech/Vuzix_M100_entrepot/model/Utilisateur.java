@@ -34,21 +34,20 @@ public class Utilisateur {
      * @param codeBarreLunette code barre vu par les lunettes
      * @return True si l'utilisateur existe, false sinon.
      */
-    public  boolean verifieUtilisateur( String codeBarreLunette)
+    public static Utilisateur verifieUtilisateur( String codeBarreLunette)
     {
         Connexionasync connexion = new Connexionasync();
         connexion.execute("htpp://bartholomeau.fr/identification.php?cb="+codeBarreLunette);
         if(connexion.getResult().equals("false"))
         {
-            return false;
+            return null;
         }
         else
         {
             //position de la premiere virgule
             int index1 = connexion.getResult().indexOf(",");
-            this.nom=connexion.getResult().substring(0,index1);
-            this.codeBarre=connexion.getResult().substring(index1);
-            return true;
+            Utilisateur user = new Utilisateur(connexion.getResult().substring(0,index1),connexion.getResult().substring(index1));
+            return user;
         }
     }
 

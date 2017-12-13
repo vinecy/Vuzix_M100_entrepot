@@ -18,4 +18,5 @@
     <string name="show_barcode_product">Montrer le code barre du produit dans la zone encadrée en vert de la caméra de votre appareil</string>
     <string name="user_finded">Utilisateur trouvé</string>
     <string name="welcome">Bienvenue</string>
+    <string name="any_command_find">Aucune commande à faire</string>
 </resources>

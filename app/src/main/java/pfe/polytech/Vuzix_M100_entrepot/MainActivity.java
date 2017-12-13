@@ -12,7 +12,12 @@ import android.widget.Toast;
 
 //import com.vuzix.speech.VoiceControl;
 
+import org.json.JSONException;
+
+import java.util.ArrayList;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import pfe.polytech.Vuzix_M100_entrepot.model.Article;
 import pfe.polytech.Vuzix_M100_entrepot.model.Commande;
 import pfe.polytech.Vuzix_M100_entrepot.model.Utilisateur;
 
@@ -104,7 +109,9 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 break;
             case SEARCH_USER:
                 Toast.makeText(getApplicationContext(), R.string.search_user_pending,Toast.LENGTH_SHORT).show();
-                if( user.verifieUtilisateur(codeBarre_scanned) ){
+                //user = Utilisateur.verifieUtilisateur(codeBarre_scanned);
+                user = new Utilisateur("John Smith", "1578415156456");
+                if( user != null ){
                     changeState(App_State.SEARCH_COMMAND);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.any_user_finded,Toast.LENGTH_SHORT).show();
@@ -119,14 +126,26 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 textview_ptr.setText(user.getNom().toString());
                 textview_ptr = findViewById(R.id.actionPending);
                 textview_ptr.setText(R.string.search_command_pending);
-                if(!(commande.chargerCommande(user).toString().equals("{false}")))
-                {
-                    changeState(App_State.NAVIGATION1);
-                }
-                else
-                {
-                    changeState(App_State.SIGN_IN);
-                }
+               // try {
+                    //commande = Commande.chargerCommande(user);
+                    ArrayList<Article> liste = new ArrayList<>();
+                    Article a1 = new Article("Fromage Blanc","2154632156234","A","26","C",1);
+                    Article a2 = new Article("Pizza","2145622145659","B","27","D",1);
+                    liste.add(a1);
+                    liste.add(a2);
+                    commande = new Commande(13,liste,"dqsfqsf","qfqsf",user);
+                    if( commande != null)
+                    {
+                        changeState(App_State.NAVIGATION1);
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), R.string.any_command_find, Toast.LENGTH_SHORT).show();
+                        changeState(App_State.SIGN_IN);
+                    }/*
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
                 break;
             case NAVIGATION1:
                 setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
@@ -134,14 +153,13 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 textview_ptr.setText(commande.getArticleCourrant().getNom());
                 textview_ptr = findViewById(R.id.product_aisle);
                 textview_ptr.setText(commande.getArticleCourrant().getAllee());
-                textview_ptr = findViewById(R.id.product_aisle);
+                textview_ptr = findViewById(R.id.product_rack);
                 textview_ptr.setText(commande.getArticleCourrant().getEtagere());
-                textview_ptr = findViewById(R.id.product_aisle);
+                textview_ptr = findViewById(R.id.product_rack_location);
                 textview_ptr.setText(commande.getArticleCourrant().getEmplacementEtagere());
                 break;
             case SEARCH_PRODUCT:
                 if( commande.checkArticle(codeBarre_scanned) ) {
-                    changeState(App_State.SEARCH_COMMAND);
                     if (commande.getArticleCourrant().getQuantiteDemande() > 1) {
                         // temporairement
                         //TODO (pour val) : gestion d'un produit en plusieurs exemplaires

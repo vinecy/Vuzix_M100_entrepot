@@ -66,7 +66,7 @@ public class Commande {
      * @return La commande sous un format JSON
      * TODO: + verif que ya pas d'evenement pour cette commande
      */
-    public Commande chargerCommande( Utilisateur preparateurBdd) throws JSONException {
+    public static Commande chargerCommande( Utilisateur preparateurBdd) throws JSONException {
         Connexionasync connexion = new Connexionasync();
         connexion.execute("htpp://bartholomeau.fr/recevoircommande.php?cb=" + preparateurBdd.getCodeBarre());
         if (!connexion.getResult().substring(0, 1).equals("i")) {
