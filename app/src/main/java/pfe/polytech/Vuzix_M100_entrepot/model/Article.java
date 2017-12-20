@@ -130,4 +130,10 @@ public class Article {
         return quantitePrise;
     }
 
+    @Override
+    public String toString()
+    {
+        return ("Article " + nom + " codebarre = "+ codeBarre);
+    }
+
 }

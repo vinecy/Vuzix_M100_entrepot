@@ -1,5 +1,7 @@
 package pfe.polytech.Vuzix_M100_entrepot.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.concurrent.ExecutionException;
@@ -12,7 +14,7 @@ import pfe.polytech.Vuzix_M100_entrepot.Connexionasync;
  * Elle comprend son nom et le code barre qui lui ai associé
  */
 
-public class Utilisateur {
+public class Utilisateur  {
 
     /** Nom de l'utilisateur*/
     private String nom;
@@ -78,4 +80,7 @@ public class Utilisateur {
     public String getCodeBarre() {
         return codeBarre;
     }
+
+
+
 }

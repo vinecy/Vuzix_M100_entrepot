@@ -17,16 +17,19 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
+
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
+import pfe.polytech.Vuzix_M100_entrepot.model.Article;
 import pfe.polytech.Vuzix_M100_entrepot.model.Commande;
 import pfe.polytech.Vuzix_M100_entrepot.model.Utilisateur;
 
 /**
  * Enumère les differentes états de l'application
  */
-enum App_State{
+/*enum App_State{
     INIT,                   // Au démarrage de l'application
     SIGN_IN,                // Page de démarrage de l'applivation : invit à l'authentification
     SCAN_USER,              // Ouverture de l'appareil de photo pour scanner le CB de l'utilisateur
@@ -39,27 +42,26 @@ enum App_State{
     NAVIGATION2,            // Boussole vers le dépot
     COMMAND_ENDED,          // Soummision de la commande terminé + invit DESAUTH ou AGAIN
     SIGN_OUT                // Desauthentification
-}
+}*/
 
 /**
  * Classe lançant le code de l'application
  */
 public class MainActivity extends Activity implements ZBarScannerView.ResultHandler//ZXingScannerView.ResultHandler
 {
-    //Permission de la caméra autorisé
+    //Code correspondant à la caméra activé
     private static final int ZBAR_CAMERA_PERMISSION = 1;
+
 
     // ATTRIBUTS
     // Elements du MODELE
     private Utilisateur user;
     private Commande commande;
 
-    // Elements de la VUE
-    //private ZXingScannerView zXingScannerView;      // IHM pour le scan du code-barre
-    private ZBarScannerView zXingScannerView;
-
     // Elements du CONTROLEUR
-    private App_State app_state = App_State.INIT;   // Etat de l'application
+    //Singleton possedant l'état en cours
+    private EtatSingleton etatObj = EtatSingleton.getSingleton();
+    private EtatSingleton.App_State app_state = etatObj.getEtat();   // Etat de l'application
     private String codeBarre_scanned = "";          // Code barre scanné
     private TextView textview_ptr;
 
@@ -70,7 +72,11 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        changeState(App_State.SIGN_IN);                             // Au demarrage, on est sur la page d'authentification
+        etatObj = EtatSingleton.getSingleton();
+        if( etatObj.getEtat() == EtatSingleton.App_State.INIT) {
+            etatObj.setEtat(EtatSingleton.App_State.SIGN_IN);
+        }
+        changeState( );                             // Au demarrage, on est sur la page d'authentification
     }
 
     /**
@@ -80,28 +86,14 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
     //Todo: Enlever handleResult et le passer dans le scanActivity
     @Override
     public void handleResult( Result result) {
-        //zXingScannerView.resumeCameraPreview(this);
-        zXingScannerView.resumeCameraPreview( this);
-        zXingScannerView.stopCamera();
-        codeBarre_scanned = result.getContents();//result.getText();
-        Toast.makeText(getApplicationContext(),"Code Barre : " + codeBarre_scanned,Toast.LENGTH_SHORT).show();
-        switch (app_state) {
-            case SCAN_USER:
-                changeState(App_State.SEARCH_USER);
-                break;
-            case SCAN_PRODUCT:
-                changeState(App_State.SEARCH_PRODUCT);
-                break;
-        }
     }
 
     /**
      * Fonction qui permet de changer et effectue les traitements nécessaires correspondant
-     * @param a nouvelle état de l'application
      */
-    public void changeState(App_State a){
-        app_state = a;
-        switch (a) {
+    public void changeState(){
+        app_state = etatObj.getEtat();
+        switch (app_state) {
             case INIT:
                 codeBarre_scanned = "";
             case SIGN_IN:
@@ -120,14 +112,18 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 setContentView(R.layout.command_coming);
                 textview_ptr = findViewById(R.id.actionPending);
                 textview_ptr.setText(R.string.search_user_pending);
-                user = Utilisateur.verifieUtilisateur(codeBarre_scanned);
-                //user = new Utilisateur("John Smith", "1578415156456");
+                codeBarre_scanned = getIntent().getStringExtra("CODE_BARRE");
+               // user = Utilisateur.verifieUtilisateur(codeBarre_scanned);
+               user = new Utilisateur("John Smith", "1578415156456");
                 if( user != null ){
-                    changeState(App_State.SEARCH_COMMAND);
+                    etatObj.setEtat( EtatSingleton.App_State.SEARCH_COMMAND);
+                    changeState( );
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.any_user_finded,Toast.LENGTH_SHORT).show();
-                    changeState(App_State.SCAN_USER);
-                    restartCamera();
+                    etatObj.setEtat( EtatSingleton.App_State.SCAN_USER);
+                    changeState( );
+                   // restartCamera();
+                    lancerScan();
                 }
                 break;
             case SEARCH_COMMAND:
@@ -137,26 +133,28 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 textview_ptr.setText(user.getNom());
                 textview_ptr = findViewById(R.id.actionPending);
                 textview_ptr.setText(R.string.search_command_pending);
-                try {
-                    commande = Commande.chargerCommande(user);
-                    //ArrayList<Article> liste = new ArrayList<>();
-                    //Article a1 = new Article("Fromage Blanc","2154632156234","A","26","C",1);
-                    //Article a2 = new Article("Pizza","2145622145659","B","27","D",1);
-                    //liste.add(a1);
-                    //liste.add(a2);
-                    //commande = new Commande(13,liste,"dqsfqsf","qfqsf",user);
+                //try {
+                    //commande = Commande.chargerCommande(user);
+                    ArrayList<Article> liste = new ArrayList<>();
+                    Article a1 = new Article("Fromage Blanc","2154632156234","A","26","C",1);
+                    Article a2 = new Article("Pizza","2145622145659","B","27","D",1);
+                    liste.add(a1);
+                    liste.add(a2);
+                    commande = new Commande(13,liste,"dqsfqsf","qfqsf",user);
                     if( commande != null)
                     {
-                        changeState(App_State.NAVIGATION1);
+                        etatObj.setEtat( EtatSingleton.App_State.NAVIGATION1);
+                        changeState( );
                     }
                     else
                     {
                         Toast.makeText(getApplicationContext(), R.string.any_command_find, Toast.LENGTH_SHORT).show();
-                        changeState(App_State.SIGN_IN);
+                        etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
+                        changeState();
                     }
-                } catch (JSONException e) {
+               /* } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
                 break;
             case NAVIGATION1:
                 setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
@@ -172,7 +170,8 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 textview_ptr.setText(user.getNom());
                 break;
             case SEARCH_PRODUCT:
-                if( commande.checkArticle(codeBarre_scanned) ) {
+                codeBarre_scanned = getIntent().getStringExtra("CODE_BARRE");
+                if( commande.checkArticle( codeBarre_scanned.toString())){
                     if (commande.getArticleCourrant().getQuantiteDemande() > 1) {
                         // temporairement
                         //TODO (pour val) : gestion d'un produit en plusieurs exemplaires
@@ -182,15 +181,20 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                     }
                     if ( commande.ArticleSuivant() != null) {
                         Toast.makeText(getApplicationContext(), R.string.pull_in_cart, Toast.LENGTH_SHORT).show();
-                        changeState(App_State.NAVIGATION1);
+                        etatObj.setEtat( EtatSingleton.App_State.NAVIGATION1);
+                        changeState();
                     } else {
-                        changeState(App_State.NAVIGATION2);
+                        etatObj.setEtat( EtatSingleton.App_State.NAVIGATION2);
+                        changeState();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.any_product_finded, Toast.LENGTH_SHORT).show();
-                    changeState(App_State.SCAN_PRODUCT);
-                    restartCamera();
+                    etatObj.setEtat( EtatSingleton.App_State.SCAN_PRODUCT);
+                    changeState( );
+                    //restartCamera();
+                    lancerScan();
                 }
+
                 break;
             case QUANTITY_INPUT:
                 setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.quantity);
@@ -198,7 +202,8 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
             case NAVIGATION2:
                 // TODO (pour val) : ecran navigation pour le depot
                 //setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
-                changeState(App_State.COMMAND_ENDED);
+                etatObj.setEtat( EtatSingleton.App_State.COMMAND_ENDED);
+                changeState( );
                 break;
             case COMMAND_ENDED:
                 setContentView(R.layout.command_ended);
@@ -206,10 +211,10 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
             case SIGN_OUT:
                 // TODO : gérer la déconnection
                 Toast.makeText(getApplicationContext(), "Good Bye" + user.getNom(), Toast.LENGTH_SHORT).show();
-                changeState(App_State.SIGN_IN);
+                etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
+                changeState( );
                 break;
             default:
-                System.out.println(" > MainActivity.changeState() : Bad case or case unknown ");
                 break;
         }
     }
@@ -222,10 +227,12 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
     {
         switch (app_state){
             case SIGN_IN:                               // si on vient de la page d'authentification
-                changeState(App_State.SCAN_USER);       // on doit scanner le code barre d'un utilisateur
+                etatObj.setEtat( EtatSingleton.App_State.SCAN_USER);
+                changeState( );       // on doit scanner le code barre d'un utilisateur
                 break;
             case NAVIGATION1:                           // so on vient de la page de navigation
-                changeState(App_State.SCAN_PRODUCT);    // on doit scanner le code barre d'un produit
+                etatObj.setEtat( EtatSingleton.App_State.SCAN_PRODUCT);
+                changeState( );    // on doit scanner le code barre d'un produit
                 break;
         }
        /* startCamera();*/
@@ -251,14 +258,6 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
     }
 
     /*-----------------------------------  CAMERA CODE -----------------------------------------*/
-    //Todo: Supprimer ces fonctions : restartCamera et StopCamera
-    public void restartCamera(){
-        zXingScannerView.startCamera();                                     // caméra allumé
-    }
-   /* public void stopCamera(){
-        zXingScannerView.stopCamera();
-    }*/
-
     /**
      * Fonction pour lancer le scan de code barre via l'activité Scan.
      *
@@ -274,8 +273,11 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         }
         // Sinon lancer le scanner
         else {
-            Intent intent = new Intent(this, ScanActivity.class);
-            startActivity( intent);
+
+            Intent scanActivityIntent = new Intent(this, ScanActivity.class);
+            this.startActivity( scanActivityIntent);
+          /*  scanActivity.getInstance().finish();
+           scanActivity.getInstance().onCreate(new Bundle());*/
         }
 
     }
@@ -296,16 +298,19 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 onDestroy();
                 break;
             case SEARCH_COMMAND:
-                changeState(App_State.SIGN_IN);
+                etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
+                changeState( );
             case SCAN_USER:
                 //stopCamera();
                 //Todo: stopper l'activité scan ici
-                changeState(App_State.SIGN_IN);
+                etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
+                changeState( );
                 break;
             case SCAN_PRODUCT:
                 //stopCamera();
                 //Todo: stopper l'activité scan ici
-                changeState(App_State.NAVIGATION1);
+                etatObj.setEtat( EtatSingleton.App_State.NAVIGATION1);
+                changeState( );
                 break;
         }
     }
@@ -313,14 +318,19 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
     public void nextStep(View view){
         switch (app_state) {
             case SEARCH_COMMAND:
-                changeState(App_State.NAVIGATION1);
+                etatObj.setEtat( EtatSingleton.App_State.NAVIGATION1);
+                changeState();
                 break;
         }
     }
 
-    public void newCommand(View view){ changeState(App_State.SEARCH_COMMAND);}
+    public void newCommand(View view){
+        etatObj.setEtat( EtatSingleton.App_State.SEARCH_COMMAND);
+        changeState( );}
 
-    public void signOut(View view){ changeState(App_State.SIGN_OUT);}
+    public void signOut(View view){
+        etatObj.setEtat( EtatSingleton.App_State.SIGN_OUT);
+        changeState( );}
 
 
 
@@ -363,10 +373,12 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         super.onResume();
         switch (app_state){
             case SCAN_USER:                         // si on quitte l'appli en cours de scan
-                zXingScannerView.startCamera();     // alors on arrete la camera
+                //zXingScannerView.startCamera();     // alors on arrete la camera
+                changeState();
                 break;
             case SCAN_PRODUCT:                      // si on quitte l'appli en cours de scan
-                zXingScannerView.startCamera();     // alors on arrete la camera
+                //zXingScannerView.startCamera();     // alors on arrete la camera
+                changeState();
                 break;
         }
     }
@@ -379,13 +391,17 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         super.onRestart();
         switch (app_state){
             case SCAN_USER:                         // si on quitte l'appli en cours de scan
-                zXingScannerView.startCamera();     // alors on arrete la camera
+               // zXingScannerView.startCamera();     // alors on arrete la camera
+                changeState();
                 break;
             case SCAN_PRODUCT:                      // si on quitte l'appli en cours de scan
-                zXingScannerView.startCamera();     // alors on arrete la camera
+               // zXingScannerView.startCamera();     // alors on arrete la camera
+                changeState();
                 break;
         }
     }
+
+
 
 
 

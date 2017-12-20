@@ -125,6 +125,7 @@ public class Commande {
      */
     public boolean checkArticle( String codeBarre)
     {
+        System.out.println("TEST DANS CHECK ARTICLE!!!!");
         return articleList.get( ptrArticleList).compareCodeBarre( codeBarre);
     }
 
