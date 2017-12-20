@@ -1,23 +1,25 @@
 
 
 package pfe.polytech.Vuzix_M100_entrepot;
-import com.google.zxing.*;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.vuzix.speech.VoiceControl;
-
 import org.json.JSONException;
 
-import java.util.ArrayList;
+import me.dm7.barcodescanner.zbar.Result;
+import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
-import pfe.polytech.Vuzix_M100_entrepot.model.Article;
 import pfe.polytech.Vuzix_M100_entrepot.model.Commande;
 import pfe.polytech.Vuzix_M100_entrepot.model.Utilisateur;
 
@@ -42,15 +44,19 @@ enum App_State{
 /**
  * Classe lançant le code de l'application
  */
-public class MainActivity extends Activity implements ZXingScannerView.ResultHandler
+public class MainActivity extends Activity implements ZBarScannerView.ResultHandler//ZXingScannerView.ResultHandler
 {
+    //Permission de la caméra autorisé
+    private static final int ZBAR_CAMERA_PERMISSION = 1;
+
     // ATTRIBUTS
     // Elements du MODELE
     private Utilisateur user;
     private Commande commande;
 
     // Elements de la VUE
-    private ZXingScannerView zXingScannerView;      // IHM pour le scan du code-barre
+    //private ZXingScannerView zXingScannerView;      // IHM pour le scan du code-barre
+    private ZBarScannerView zXingScannerView;
 
     // Elements du CONTROLEUR
     private App_State app_state = App_State.INIT;   // Etat de l'application
@@ -71,11 +77,13 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
      * Gestionnaire de resultat de l'application. Appeler lors le scan a trouvé un code barre.
      * badge
      */
+    //Todo: Enlever handleResult et le passer dans le scanActivity
     @Override
-    public void handleResult(Result result) {
-        zXingScannerView.resumeCameraPreview(this);
+    public void handleResult( Result result) {
+        //zXingScannerView.resumeCameraPreview(this);
+        zXingScannerView.resumeCameraPreview( this);
         zXingScannerView.stopCamera();
-        codeBarre_scanned = result.getText();
+        codeBarre_scanned = result.getContents();//result.getText();
         Toast.makeText(getApplicationContext(),"Code Barre : " + codeBarre_scanned,Toast.LENGTH_SHORT).show();
         switch (app_state) {
             case SCAN_USER:
@@ -220,21 +228,58 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 changeState(App_State.SCAN_PRODUCT);    // on doit scanner le code barre d'un produit
                 break;
         }
-        startCamera();
+       /* startCamera();*/
+
+       // Lancement du scan via la camera
+       lancerScan();
+       //TODO: trouver commment arreter l'activité!!!
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case ZBAR_CAMERA_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(  ScanActivity.class != null) {
+                        Intent intent = new Intent(this,  ScanActivity.class);
+                        startActivity(intent);
+                    }
+                } else {
+                    Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
+                }
+                return;
+        }
     }
 
-    public void startCamera(){
-        zXingScannerView =new ZXingScannerView(getApplicationContext());    // création de la vue scanner ZXing
-        zXingScannerView.setResultHandler(this);                            // gestion du resultat par handleResult() de cette classe
-        zXingScannerView.startCamera();                                     // caméra allumé
-        setContentView(zXingScannerView);                                   // changement de vue
-    }
+    /*-----------------------------------  CAMERA CODE -----------------------------------------*/
+    //Todo: Supprimer ces fonctions : restartCamera et StopCamera
     public void restartCamera(){
         zXingScannerView.startCamera();                                     // caméra allumé
     }
-    public void stopCamera(){
+   /* public void stopCamera(){
         zXingScannerView.stopCamera();
+    }*/
+
+    /**
+     * Fonction pour lancer le scan de code barre via l'activité Scan.
+     *
+     */
+    public void lancerScan()
+    {
+        // Si la permission de la camera n'est pas accordé
+        //Todo: ajouter un message
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+               != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, ZBAR_CAMERA_PERMISSION);
+        }
+        // Sinon lancer le scanner
+        else {
+            Intent intent = new Intent(this, ScanActivity.class);
+            startActivity( intent);
+        }
+
     }
+    /*-----------------------------------  FIN CAMERA CODE -----------------------------------------*/
 
     /**
      * Fonction qui permet de revenir à l'état précedent et effectue les traitements nécessaires correspondant
@@ -253,11 +298,13 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
             case SEARCH_COMMAND:
                 changeState(App_State.SIGN_IN);
             case SCAN_USER:
-                stopCamera();
+                //stopCamera();
+                //Todo: stopper l'activité scan ici
                 changeState(App_State.SIGN_IN);
                 break;
             case SCAN_PRODUCT:
-                stopCamera();
+                //stopCamera();
+                //Todo: stopper l'activité scan ici
                 changeState(App_State.NAVIGATION1);
                 break;
         }
@@ -296,10 +343,12 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
         super.onPause();
         switch (app_state){
             case SCAN_USER:                         // si on quitte l'appli en cours de scan
-                zXingScannerView.stopCamera();      // alors on arrete la camera
+               //zXingScannerView.stopCamera();      // alors on arrete la camera
+                //TODO= pb => replacer par la fin d'activity!
                 break;
             case SCAN_PRODUCT:                      // si on quitte l'appli en cours de scan
-                zXingScannerView.stopCamera();      // alors on arrete la camera
+               // zXingScannerView.stopCamera();      // alors on arrete la camera
+                //TODO= pb => replacer par la fin d'activity!
                 break;
         }
     }
@@ -337,8 +386,6 @@ public class MainActivity extends Activity implements ZXingScannerView.ResultHan
                 break;
         }
     }
-
-
 
 
 

@@ -19,7 +19,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        tools:onClick="signIn" />
+        tools:onClick="signIn"
+        />
+
 
     <TextView
         android:id="@+id/textView3"

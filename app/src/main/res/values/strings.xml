@@ -19,4 +19,5 @@
     <string name="user_finded">Utilisateur trouvé</string>
     <string name="welcome">Bienvenue</string>
     <string name="any_command_find">Aucune commande à faire</string>
+    <string name="scan_cb">Scan du code barre</string>
 </resources>
