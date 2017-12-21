@@ -26,23 +26,7 @@ import pfe.polytech.Vuzix_M100_entrepot.model.Article;
 import pfe.polytech.Vuzix_M100_entrepot.model.Commande;
 import pfe.polytech.Vuzix_M100_entrepot.model.Utilisateur;
 
-/**
- * Enumère les differentes états de l'application
- */
-/*enum App_State{
-    INIT,                   // Au démarrage de l'application
-    SIGN_IN,                // Page de démarrage de l'applivation : invit à l'authentification
-    SCAN_USER,              // Ouverture de l'appareil de photo pour scanner le CB de l'utilisateur
-    SEARCH_USER,            // Recherche de l'utilisateur d'après le code barre
-    SEARCH_COMMAND,         // Page de chargement de la commande
-    NAVIGATION1,            // Boussole vers l'article
-    SCAN_PRODUCT,           // Ouverture de l'appareil de photo pour scanner le CB du produit
-    SEARCH_PRODUCT,         // Recherche de l'article via le code-barre
-    QUANTITY_INPUT,         // Clavier numérique pour la saisie de la quantité
-    NAVIGATION2,            // Boussole vers le dépot
-    COMMAND_ENDED,          // Soummision de la commande terminé + invit DESAUTH ou AGAIN
-    SIGN_OUT                // Desauthentification
-}*/
+
 
 /**
  * Classe lançant le code de l'application
@@ -55,6 +39,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
     // ATTRIBUTS
     // Elements du MODELE
+    private UserCommandeSingleton userCmdObj = UserCommandeSingleton.getSingleton();
     private Utilisateur user;
     private Commande commande;
 
@@ -74,7 +59,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         super.onCreate(savedInstanceState);
         etatObj = EtatSingleton.getSingleton();
         if( etatObj.getEtat() == EtatSingleton.App_State.INIT) {
-            etatObj.setEtat(EtatSingleton.App_State.SIGN_IN);
+            etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
         }
         changeState( );                             // Au demarrage, on est sur la page d'authentification
     }
@@ -134,13 +119,16 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 textview_ptr = findViewById(R.id.actionPending);
                 textview_ptr.setText(R.string.search_command_pending);
                 //try {
-                    //commande = Commande.chargerCommande(user);
+                    //commandeTmp = Commande.chargerCommande(user);
+
                     ArrayList<Article> liste = new ArrayList<>();
                     Article a1 = new Article("Fromage Blanc","2154632156234","A","26","C",1);
                     Article a2 = new Article("Pizza","2145622145659","B","27","D",1);
                     liste.add(a1);
                     liste.add(a2);
-                    commande = new Commande(13,liste,"dqsfqsf","qfqsf",user);
+                    Commande commandeTmp = new Commande(13,liste,"dqsfqsf","qfqsf",user);
+                    //Change la commande en cours
+                    //userCmdObj.setCommande( commandeTmp);
                     if( commande != null)
                     {
                         etatObj.setEtat( EtatSingleton.App_State.NAVIGATION1);
