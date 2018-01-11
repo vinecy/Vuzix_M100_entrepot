@@ -75,7 +75,7 @@ public class UserCommandeSingleton {
      * Accès à l'utilisateur en cours
      * @return l'utilisateur en cours
      */
-    public Utilisateur getUtilisateur( Utilisateur newUser)
+    public Utilisateur getUtilisateur()
     {
         return instance.user;
     }
