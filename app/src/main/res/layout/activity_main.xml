@@ -17,7 +17,6 @@
         android:text="@string/sign_in"
         app:layout_constraintBottom_toTopOf="@+id/buttonEXIT"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         tools:onClick="signIn" />
 
@@ -35,7 +34,8 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonSIGN_IN"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.14" />
 
     <Button
         android:id="@+id/buttonEXIT"
@@ -49,5 +49,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="93dp"
+        android:layout_height="87dp"
+        app:srcCompat="@drawable/signin"
+        tools:layout_editor_absoluteX="81dp"
+        tools:layout_editor_absoluteY="60dp" />
 
 </android.support.constraint.ConstraintLayout>
