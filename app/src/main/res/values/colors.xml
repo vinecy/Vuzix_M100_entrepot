@@ -11,4 +11,7 @@
     <color name="divider">#B6B6B6</color>
     <color name ="grey_black">#303030</color>
     <color name="textColor">#FAFAFA</color>
+    <color name="compassCircle">#67ffffff</color>
+    <color name="leftTriangleSidePointer">#FF840000</color>
+    <color name="rightTriangleSidePointer">#FFFF0000</color>
 </resources>

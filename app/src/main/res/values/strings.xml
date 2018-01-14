@@ -6,11 +6,16 @@
     <string name="app_name">Scan App</string>
     <string name="enter_quantity">Saisir la quantité prise de ce produit</string>
     <string name="exit">Quitter</string>
-    <string name="exit_pending">Fermeture en cours ...</string>
+    <string name="exit_pending">Fermeture en cours …</string>
     <string name="find">Trouvé !</string>
     <string name="is_located">se situe</string>
     <string name="new_command">Nouvelle commande</string>
     <string name="next_product">Prochain produit :</string>
+    <string name="not_defined_product_name">Nom du produit non défini!</string>
+    <string name="not_defined_product_ref">Réf du produit non défini!</string>
+    <string name="not_defined_product_location">Location du produit non défini!</string>
+    <string name="not_defined_product_quantity">x Non défini!</string>
+    <string name="unknown">Inconnu!</string>
     <string name="pull_in_cart">Mis dans le panier !</string>
     <string name="rack">Etagère</string>
     <string name="rack_location">Emplacement étagère</string>
