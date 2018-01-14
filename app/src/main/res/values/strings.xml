@@ -4,6 +4,7 @@
     <string name="any_product_finded">"Aucun produit trouvé avec ce code barre. Veuillez réesayer"</string>
     <string name="any_user_finded">"Aucun utilisateur trouvé avec ce code barre. Veuillez réesayer"</string>
     <string name="app_name">Scan App</string>
+    <string name="end_command">Commande fini</string>
     <string name="enter_quantity">Saisir la quantité prise de ce produit</string>
     <string name="exit">Quitter</string>
     <string name="exit_pending">Fermeture en cours ...</string>

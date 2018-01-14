@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import me.dm7.barcodescanner.zbar.Result;
@@ -21,6 +22,9 @@ public class ScanActivity extends Activity implements ZBarScannerView.ResultHand
     private static ScanActivity scanActivity = null;    // Activité de scan
     private EtatSingleton etatObj ;                     // Singleton possedant l'état en cours
     private EtatSingleton.App_State app_state ;                      // Etat de l'application
+
+    private TextView textView_ptr;
+
     // METHODS
     @Override
     public void onCreate(Bundle state) {
@@ -51,9 +55,13 @@ public class ScanActivity extends Activity implements ZBarScannerView.ResultHand
         app_state = etatObj.getEtat();
         switch (app_state) {
             case SCAN_USER:
+                textView_ptr = findViewById(R.id.messageScan);
+                textView_ptr.setText("show_barcode_badge");
                 etatObj.setEtat( EtatSingleton.App_State.SEARCH_USER);
                 break;
             case SCAN_PRODUCT:
+                textView_ptr = findViewById(R.id.messageScan);
+                textView_ptr.setText("Commande ==> TODO mettre nom produit");
                 etatObj.setEtat( EtatSingleton.App_State.SEARCH_PRODUCT);
                 break;
         }
