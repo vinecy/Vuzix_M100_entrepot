@@ -6,7 +6,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -167,6 +171,11 @@ public class Commande {
      */
     public void envoieCommandeEnCours()
     {
+        Connexionasync connexion = new Connexionasync();
+        String cb = this.getPreparateur().getCodeBarre();
+        int idCommande = this.getId();
+        String url="http://bartholomeau.fr/envoieCommandeEnCours.php?codeBarre="+cb+"&idCommande="+idCommande;
+        connexion.execute(url);
 
     }
 
@@ -176,17 +185,28 @@ public class Commande {
      */
     public void FinCommande()
     {
-
+        int idCommande = this.getId();
+        Connexionasync connexion = new Connexionasync();
+        String cb = this.preparateur.getCodeBarre();
+        String url="http://bartholomeau.fr/findCommande.php?cb="+cb+"&idCommande="+idCommande;
+        connexion.execute(url);
     }
 
     /**
      * Envoie au serveur l'evenement concernant la commande et l'article en cours.
-     * @param erreur Message explicitant l'erreur survenu dans la commande
+     * @param typeEvenement Message explicitant l'erreur survenu dans la commande
      * TODO Zied => ajouter dans bdd
      */
-    public void erreurCommande( String erreur)
+    public void erreurCommande( String typeEvenement ,String idArticle)
     {
-
+        Connexionasync connexion = new Connexionasync();
+        String codeBarrePrep = this.getPreparateur().getCodeBarre();
+        int idCommande= this.getId();
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Date date = Calendar.getInstance().getTime();
+        String timeStamp = df.format(date);
+        String url=("http://bartholomeau.fr/evenement.php?timeStamp="+timeStamp+"&codeBarrePrep="+codeBarrePrep+"&idCommande="+idCommande+"&idArticle="+idArticle+"&typeEvenement="+typeEvenement);
+        connexion.execute(url);
     }
 
 
