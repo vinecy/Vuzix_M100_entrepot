@@ -36,6 +36,25 @@ public class ScanActivity extends Activity implements ZBarScannerView.ResultHand
         ViewGroup contentFrame = (ViewGroup) findViewById(R.id.content_frame);  // Appel le cadre où sera la caméra dans scan_layout
         mScannerView = new ZBarScannerView(this);                        // Création de l'objet scannant les codes barres
         contentFrame.addView(mScannerView);                                     // Ajoute le scan dans le cadre
+        app_state = etatObj.getEtat();
+        UserCommandeSingleton userCmdObj = UserCommandeSingleton.getSingleton();
+        //Affichage des messages au dessus de la fenetre de scan
+        switch (app_state) {
+            //Cas scan de l'utilisateur
+            case SCAN_USER:
+                textView_ptr = findViewById(R.id.messageScan);
+                textView_ptr.setTextColor( getResources().getColor(R.color.textColor));
+                textView_ptr.setText( getString( R.string.show_barcode_badge));
+                break;
+            //Cas scan du produit
+            case SCAN_PRODUCT:
+                textView_ptr = findViewById(R.id.messageScan);
+                textView_ptr.setTextColor( getResources().getColor(R.color.textColor));
+                textView_ptr.setText( userCmdObj.getCommande().getArticleCourrant().getNom() + " : "
+                        + userCmdObj.getCommande().getArticleCourrant().getCodeBarre()
+                        + " x " +  userCmdObj.getCommande().getArticleCourrant().getQuantiteDemande());
+                break;
+        }
     }
 
     @Override
@@ -55,13 +74,9 @@ public class ScanActivity extends Activity implements ZBarScannerView.ResultHand
         app_state = etatObj.getEtat();
         switch (app_state) {
             case SCAN_USER:
-                textView_ptr = findViewById(R.id.messageScan);
-                textView_ptr.setText("show_barcode_badge");
                 etatObj.setEtat( EtatSingleton.App_State.SEARCH_USER);
                 break;
             case SCAN_PRODUCT:
-                textView_ptr = findViewById(R.id.messageScan);
-                textView_ptr.setText("Commande ==> TODO mettre nom produit");
                 etatObj.setEtat( EtatSingleton.App_State.SEARCH_PRODUCT);
                 break;
         }
