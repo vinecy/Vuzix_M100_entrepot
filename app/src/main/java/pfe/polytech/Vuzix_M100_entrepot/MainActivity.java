@@ -22,6 +22,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,9 +142,9 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 textview_ptr.setText(R.string.search_user_pending);
                 codeBarre_scanned = getIntent().getStringExtra("CODE_BARRE");
                 // SI AVEC CONNECTION SERVEUR : DECOMENTER LA LIGNE EN-DESSOUS
-                //Utilisateur user = Utilisateur.verifieUtilisateur(codeBarre_scanned);
+                Utilisateur user = Utilisateur.verifieUtilisateur(codeBarre_scanned);
                 // SI SANS CONNECTION SERVEUR : DECOMMENTER LA LIGNE EN-DESSOUS
-                Utilisateur user = new Utilisateur("John Smith", codeBarre_scanned);
+                //Utilisateur user = new Utilisateur("John Smith", codeBarre_scanned);
                 if( user != null ){             // si utilisateur trouvé
                     userCmdObj.setUtilisateur(user);
                     etatObj.setEtat( EtatSingleton.App_State.SEARCH_COMMAND);
@@ -162,17 +164,17 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 textview_ptr.setText(userCmdObj.getUtilisateur().getNom());
                 textview_ptr = findViewById(R.id.actionPending);
                 textview_ptr.setText(R.string.search_command_pending);
-                /*try {
-                    //Commande commandeTmp = Commande.chargerCommande(userCmdObj.getUtilisateur());
-                    */
+                try {
+                    Commande commandeTmp = Commande.chargerCommande(userCmdObj.getUtilisateur());
+
                     // SANS SERVEUR
-                    ArrayList<Article> liste = new ArrayList<>();
+                    /*ArrayList<Article> liste = new ArrayList<>();
                     //Article a1 = new Article("Fromage Blanc","2154632156234","A","26","C",1);
                     Article a2 = new Article("Pizza","2145622145659","B","27","D",3);
                     //liste.add(a1);
                     liste.add(a2);
                     Commande commandeTmp;
-                    commandeTmp = new Commande(13,liste,"dqsfqsf","qfqsf",userCmdObj.getUtilisateur());
+                    commandeTmp = new Commande(13,liste,"dqsfqsf","qfqsf",userCmdObj.getUtilisateur());*/
 
                     //Change la commande en cours
                     userCmdObj.setCommande( commandeTmp);
@@ -186,9 +188,9 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                         etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
                         changeState();
                     }
-                /*} catch (JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
                 break;
             case NAVIGATION1:
                 Toast.makeText(getApplicationContext(), " > NAVIGATION1",Toast.LENGTH_SHORT).show();
