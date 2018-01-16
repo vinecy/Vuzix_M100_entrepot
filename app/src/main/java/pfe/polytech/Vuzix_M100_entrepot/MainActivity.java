@@ -371,7 +371,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         switch (app_state) {
             case INIT:
             case SIGN_IN:
-                Toast.makeText(getApplicationContext(), R.string.exit_pending, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), R.string.exit_pending, Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case SEARCH_USER:
@@ -380,7 +380,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 changeState( );
             case NAVIGATION1:
             case NAVIGATION2:
-                Toast.makeText(getApplicationContext(), R.string.cannot_quit_command_pending, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), R.string.cannot_quit_command_pending, Toast.LENGTH_SHORT).show();
                 break;
             case QUANTITY_INPUT:
                 etatObj.setEtat( EtatSingleton.App_State.NAVIGATION1);
@@ -448,13 +448,13 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onPause() {
-        Toast.makeText(getApplicationContext(), "MainActivity.onPause()", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(), "MainActivity.onPause()", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
 
     @Override
     protected void onResume(){
-        Toast.makeText(getApplicationContext(), "MainActivity.onResume()", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(), "MainActivity.onResume()", Toast.LENGTH_SHORT).show();
         super.onResume();
         // Lie evenement de la boussole numérique au listener
         sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -462,7 +462,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onStop(){
-        Toast.makeText(getApplicationContext(), "MainActivity.onStop()", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(), "MainActivity.onStop()", Toast.LENGTH_SHORT).show();
         super.onStop();
         // Retire lien entre listener et evenements de la boussole numérique
         sensorManager.unregisterListener(sensorListener);
@@ -470,13 +470,13 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onRestart(){
-        Toast.makeText(getApplicationContext(), "MainActivity.onRestart()", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(), "MainActivity.onRestart()", Toast.LENGTH_SHORT).show();
         super.onRestart();
     }
 
     @Override
     protected void onDestroy(){
-        Toast.makeText(getApplicationContext(), "MainActivity.onDestroy()", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(), "MainActivity.onDestroy()", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 }

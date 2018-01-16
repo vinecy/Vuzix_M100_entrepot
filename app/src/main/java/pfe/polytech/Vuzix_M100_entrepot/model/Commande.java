@@ -200,6 +200,7 @@ public class Commande {
     public void erreurCommande( String typeEvenement ,String idArticle)
     {
         Connexionasync connexion = new Connexionasync();
+        //TODO: passer l'id du preparateur au lieu du code barre
         String codeBarrePrep = this.getPreparateur().getCodeBarre();
         int idCommande= this.getId();
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");

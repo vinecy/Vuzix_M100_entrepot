@@ -20,11 +20,14 @@ public class Utilisateur  {
     private String nom;
     /** Code barre associé à l'utilisateur*/
     private String codeBarre;
+    /** Id de l'utilisateur (base de données)*/
+    private int idUser;
 
     /**
      * Constructeur de la classe Utilisateur
      * @param nomUser Nom de l'utilisateur
      * @param CodeBarreUser Code barre associé à l'utilisateur
+     *  //Todo: ajouter id user dans le constructeur
      */
     public Utilisateur( String nomUser, String CodeBarreUser)
     {
@@ -39,6 +42,7 @@ public class Utilisateur  {
      * Retourne un booléen True si l'utilisateur existe, false sinon.
      * @param codeBarreLunette code barre vu par les lunettes
      * @return True si l'utilisateur existe, false sinon.
+     * //TODO: ajouter l'id dans le JSON
      */
     public static Utilisateur verifieUtilisateur( String codeBarreLunette)
     {
@@ -79,6 +83,14 @@ public class Utilisateur  {
      */
     public String getCodeBarre() {
         return codeBarre;
+    }
+
+    /**
+     * Récupère l'id de l'utilisateur des lunettes
+     * @return l'id de l'utilisateur des lunettes ( int)
+     */
+    public int getIdUser() {
+        return idUser;
     }
 
 
