@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -62,8 +63,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         @Override
         public void onSensorChanged(SensorEvent event) {
             if( compassView != null ) {
-                //compassView.setNorthOrientation(event.values[SensorManager.DATA_X]);
-                compassView.setNorthOrientation(15);
+                compassView.setNorthOrientation(event.values[SensorManager.DATA_X]);
             }
         }
 
@@ -77,16 +77,16 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Toast.makeText(getApplicationContext(), "MainActivity.onCreate()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "MainActivity.onCreate()", Toast.LENGTH_SHORT).show();
         super.onCreate(savedInstanceState);
         etatObj = EtatSingleton.getSingleton();                         // Récupétation de notre objet contenant l'état de l'application
         app_state = etatObj.getEtat();
-        Toast.makeText(getApplicationContext(), ("etat : " + app_state), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), ("etat : " + app_state), Toast.LENGTH_SHORT).show();
         if( app_state == EtatSingleton.App_State.INIT) {                // si on crée l'activité pour la première fois (correspond à l'état INIT)
-            Toast.makeText(getApplicationContext(), "Initialisation", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Initialisation", Toast.LENGTH_SHORT).show();
             etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);          // on passe à l'état d'authentification
         } else {                                                        // sinon on garde l'état actuel de l'appli, donné par le singleton
-            Toast.makeText(getApplicationContext(), "Reprise", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Reprise", Toast.LENGTH_SHORT).show();
         }
         userCmdObj = UserCommandeSingleton.getSingleton();
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
@@ -117,24 +117,24 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         app_state = etatObj.getEtat();
         switch (app_state) {
             case INIT:
-                Toast.makeText(getApplicationContext(), " > INIT",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > INIT",Toast.LENGTH_SHORT).show();
                 codeBarre_scanned = "";
             case SIGN_IN:
-                Toast.makeText(getApplicationContext(), " > SIGN_IN",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > SIGN_IN",Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.activity_main);
                 break;
             case SCAN_USER:
-                Toast.makeText(getApplicationContext(), " > SCAN_USER",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > SCAN_USER",Toast.LENGTH_SHORT).show();
                 codeBarre_scanned = "";
-                Toast.makeText(getApplicationContext(), R.string.show_barcode_badge,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), R.string.show_barcode_badge,Toast.LENGTH_SHORT).show();
                 break;
             case SCAN_PRODUCT:
-                Toast.makeText(getApplicationContext(), " > SCAN_PRODUCT",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > SCAN_PRODUCT",Toast.LENGTH_SHORT).show();
                 codeBarre_scanned = "";
-                Toast.makeText(getApplicationContext(), R.string.show_barcode_product,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), R.string.show_barcode_product,Toast.LENGTH_SHORT).show();
                 break;
             case SEARCH_USER:
-                Toast.makeText(getApplicationContext(), " > SCAN_USER",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > SCAN_USER",Toast.LENGTH_SHORT).show();
                 //Toast.makeText(getApplicationContext(), R.string.search_user_pending,Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.command_coming);
                 textview_ptr = findViewById(R.id.actionPending);
@@ -156,8 +156,8 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 }
                 break;
             case SEARCH_COMMAND:
-                Toast.makeText(getApplicationContext(), " > SEARCH_COMMAND",Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), R.string.search_command_pending,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > SEARCH_COMMAND",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), R.string.search_command_pending,Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.command_coming);
                 textview_ptr = findViewById(R.id.username);
                 textview_ptr.setText(userCmdObj.getUtilisateur().getNom());
@@ -192,7 +192,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 }*/
                 break;
             case NAVIGATION1:
-                Toast.makeText(getApplicationContext(), " > NAVIGATION1",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > NAVIGATION1",Toast.LENGTH_SHORT).show();
                 setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
                 compassView = (CompassView)findViewById(R.id.boussole);
                 textview_ptr = findViewById(R.id.product_name);
@@ -217,7 +217,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 */
                 break;
             case SEARCH_PRODUCT:
-                Toast.makeText(getApplicationContext(), " > SEARCH_PRODUCT",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > SEARCH_PRODUCT",Toast.LENGTH_SHORT).show();
                 codeBarre_scanned = getIntent().getStringExtra("CODE_BARRE");
                 if( userCmdObj.getCommande().checkArticle(codeBarre_scanned)){
                     if (userCmdObj.getCommande().getArticleCourrant().getQuantiteDemande() > 1) {
@@ -242,7 +242,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 }
                 break;
             case QUANTITY_INPUT:
-                Toast.makeText(getApplicationContext(), " > QUANTITY_INPUT",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > QUANTITY_INPUT",Toast.LENGTH_SHORT).show();
                 setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.quantity);
                 textview_ptr = findViewById(R.id.product_name);
                 textview_ptr.setText( userCmdObj.getCommande().getArticleCourrant().getNom());
@@ -255,6 +255,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 textview_ptr = findViewById(R.id.product_ref);
                 textview_ptr.setText( "CodeBarre : " + userCmdObj.getCommande().getArticleCourrant().getCodeBarre());
                 final EditText input = findViewById(R.id.nbProduitPris);
+                input.setTextColor(getResources().getColor(R.color.textColor));
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);
                 input.setOnKeyListener(new View.OnKeyListener() {
                     @Override
@@ -273,20 +274,20 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 });
                 break;
             case NAVIGATION2:
-                Toast.makeText(getApplicationContext(), " > NAVIGATION2",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > NAVIGATION2",Toast.LENGTH_SHORT).show();
                 // TODO (pour val) : ecran navigation pour le depot
                 //setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
                 etatObj.setEtat( EtatSingleton.App_State.COMMAND_ENDED);
                 changeState( );
                 break;
             case COMMAND_ENDED:
-                Toast.makeText(getApplicationContext(), " > COMMAND_ENDED",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > COMMAND_ENDED",Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.command_ended);
                 break;
             case SIGN_OUT:
-                Toast.makeText(getApplicationContext(), " > SIGN_OUT",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), " > SIGN_OUT",Toast.LENGTH_SHORT).show();
                 // TODO : gérer la déconnection coté serveur
-                Toast.makeText(getApplicationContext(), "Good Bye" + userCmdObj.getUtilisateur().getNom(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Good Bye" + userCmdObj.getUtilisateur().getNom().toString(), Toast.LENGTH_SHORT).show();
                 etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
                 changeState( );
                 break;
@@ -366,24 +367,25 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
     @Override
     public void onBackPressed(){
         switch (app_state) {
+            case INIT:
             case SIGN_IN:
                 Toast.makeText(getApplicationContext(), R.string.exit_pending, Toast.LENGTH_SHORT).show();
                 finish();
                 break;
+            case SEARCH_USER:
             case SEARCH_COMMAND:
                 etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
                 changeState( );
-            case SCAN_USER:
-                //stopCamera();
-                //Todo: stopper l'activité scan ici
-                etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
-                changeState( );
+            case NAVIGATION1:
+            case NAVIGATION2:
+                Toast.makeText(getApplicationContext(), R.string.cannot_quit_command_pending, Toast.LENGTH_SHORT).show();
                 break;
-            case SCAN_PRODUCT:
-                //stopCamera();
-                //Todo: stopper l'activité scan ici
+            case QUANTITY_INPUT:
                 etatObj.setEtat( EtatSingleton.App_State.NAVIGATION1);
-                changeState( );
+                changeState();
+                break;
+            case COMMAND_ENDED:
+                etatObj.setEtat( EtatSingleton.App_State.SIGN_OUT);
                 break;
         }
     }
@@ -396,20 +398,24 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 break;
             case QUANTITY_INPUT:
                 EditText editText = findViewById(R.id.nbProduitPris);
-                Integer value = Integer.valueOf(editText.getText().toString());
-                if( value <= userCmdObj.getCommande().getArticleCourrant().getQuantiteDemande() ){
-                    userCmdObj.getCommande().checkQuantite(value);
-                    if (userCmdObj.getCommande().ArticleSuivant() != null) {
-                        Toast.makeText(getApplicationContext(), R.string.pull_in_cart, Toast.LENGTH_SHORT).show();
-                        etatObj.setEtat(EtatSingleton.App_State.NAVIGATION1);
-                        changeState();
+                if( !editText.getText().toString().equals("")){
+                    Integer value = Integer.valueOf(editText.getText().toString());
+                    if( value <= userCmdObj.getCommande().getArticleCourrant().getQuantiteDemande() ){
+                        userCmdObj.getCommande().checkQuantite(value);
+                        if (userCmdObj.getCommande().ArticleSuivant() != null) {
+                            Toast.makeText(getApplicationContext(), R.string.pull_in_cart, Toast.LENGTH_SHORT).show();
+                            etatObj.setEtat(EtatSingleton.App_State.NAVIGATION1);
+                            changeState();
+                        } else {
+                            etatObj.setEtat(EtatSingleton.App_State.NAVIGATION2);
+                            changeState();
+                        }
                     } else {
-                        etatObj.setEtat(EtatSingleton.App_State.NAVIGATION2);
-                        changeState();
+                        editText.setText("");
+                        Toast.makeText(getApplicationContext(), "IMPOSSIBLE " + value + " > " + userCmdObj.getCommande().getArticleCourrant().getQuantiteDemande() , Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     editText.setText("");
-                    Toast.makeText(getApplicationContext(), "IMPOSSIBLE " + value + " > " + userCmdObj.getCommande().getArticleCourrant().getQuantiteDemande() , Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
