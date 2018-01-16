@@ -134,21 +134,21 @@ public class CompassView extends View {
         canvas.drawCircle(centerX, centerY, radius, circlePaint);
         canvas.save();
         // Rotation du canevas pour que le nord pointe vers le haut
-        canvas.rotate(northOrientation, centerX, centerY);
+        canvas.rotate(-northOrientation, centerX, centerY);
         // Def du tracé du triangle coté Gauche + dessin
         leftTrianglePath.reset();
-        leftTrianglePath.moveTo((float)(centerX + radius*0.8*Math.cos(-2.0*Math.PI/3.0)) + 0,
-                                (float)(centerY + radius*0.8*Math.sin(-2.0*Math.PI/3.0)) + 0);
-        leftTrianglePath.lineTo(centerX, (float)(centerY + radius*0.8));
-        leftTrianglePath.lineTo(centerX, (float)(centerY - radius*0.5));
-        canvas.rotate(180, centerX, centerY);
+        leftTrianglePath.moveTo((float)(centerX + radius*0.8*Math.cos(2.0*Math.PI/3.0)) + 0,
+                                (float)(centerY + radius*0.8*Math.sin(2.0*Math.PI/3.0)) + 0);
+        leftTrianglePath.lineTo(centerX, (float)(centerY - radius*0.8));
+        leftTrianglePath.lineTo(centerX, (float)(centerY + radius*0.5));
+        //canvas.rotate(180, centerX, centerY);
         canvas.drawPath(leftTrianglePath, leftTriangleSide);
         // Def du tracé du triangle coté Droit + dessin
         rightTrianglePath.reset();
-        rightTrianglePath.moveTo((float)(centerX + radius*0.8*Math.cos(-Math.PI/3.0)) + 0,
-                                 (float)(centerY + radius*0.8*Math.sin(-Math.PI/3.0)) + 0);
-        rightTrianglePath.lineTo(centerX, (float)(centerY + radius*0.8));
-        rightTrianglePath.lineTo(centerX, (float)(centerY - radius*0.5));
+        rightTrianglePath.moveTo((float)(centerX + radius*0.8*Math.cos(Math.PI/3.0)) + 0,
+                                 (float)(centerY + radius*0.8*Math.sin(Math.PI/3.0)) + 0);
+        rightTrianglePath.lineTo(centerX, (float)(centerY - radius*0.8));
+        rightTrianglePath.lineTo(centerX, (float)(centerY + radius*0.5));
         canvas.drawPath(rightTrianglePath, rightTriangleSide);
         // Restauration position initiale
         canvas.restore();

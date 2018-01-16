@@ -62,7 +62,8 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         @Override
         public void onSensorChanged(SensorEvent event) {
             if( compassView != null ) {
-                compassView.setNorthOrientation(event.values[SensorManager.DATA_X]);
+                //compassView.setNorthOrientation(event.values[SensorManager.DATA_X]);
+                compassView.setNorthOrientation(15);
             }
         }
 
