@@ -29,7 +29,7 @@ public class Utilisateur  {
      * Constructeur de la classe Utilisateur
      * @param nomUser Nom de l'utilisateur
      * @param CodeBarreUser Code barre associé à l'utilisateur
-     *  //Todo: ajouter id user dans le constructeur
+     * @param id Identifiant de l'utilisateur de la base de données
      */
     public Utilisateur( String id, String nomUser, String CodeBarreUser)
     {
@@ -45,7 +45,6 @@ public class Utilisateur  {
      * Retourne un booléen True si l'utilisateur existe, false sinon.
      * @param codeBarreLunette code barre vu par les lunettes
      * @return True si l'utilisateur existe, false sinon.
-     * //TODO: ajouter l'id dans le JSON
      */
     public static Utilisateur verifieUtilisateur( String codeBarreLunette)
     {
@@ -64,8 +63,9 @@ public class Utilisateur  {
         }
         else
         {
-            //position de la premiere virgule
+            //Sépare le string en fonction des virgule
             List<String> listUser = Arrays.asList( connexion.getResult().split(","));
+            //Créer l'utilisateur
             Utilisateur user = new Utilisateur(listUser.get(0),listUser.get(1), listUser.get(2));
             return user;
         }
