@@ -21,7 +21,7 @@ public class UserCommandeSingleton {
      */
     private UserCommandeSingleton()
     {
-        user = new Utilisateur(null, null);
+        user = new Utilisateur("0", null, null);
         cmd = new Commande( 0, null, null, null, null);
     }
 
