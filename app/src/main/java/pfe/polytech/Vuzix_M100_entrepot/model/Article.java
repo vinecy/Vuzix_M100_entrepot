@@ -23,21 +23,24 @@ public class Article {
     private int quantiteDemande;
     /** Quantité récupérer par le préparateur de commande lors de la réalisation de celle-ci*/
     private int quantitePrise;
+    /** identifiant de l'article (base de données)*/
+    private int idArticle;
 
 
     /**
      * Constructeur de l'objet article.
      * La quantité prise par un utilisateur est initialisé à zéros lors de la création.
+     * @param id Identifiant de l'article
      * @param nomCmd Nom de l'article
      * @param codeBarreCmd Code barre de l'article
      * @param alleeCmd Emplacement du produit : Allée de l'entrepôt
      * @param etagereCmd Emplacement du produit : Etagère de l'allée
      * @param emplacementEtagereCmd Emplacement du produit : Emplacement sur l'étagère
      * @param quantiteDemandeCmd Quantité souhaité par le client et demandé dans une commande définis
-     * TODO: Ajouter des exceptions si code barre = null ou pareil pour l'allee
      */
-    public Article( String nomCmd, String codeBarreCmd, String alleeCmd, String etagereCmd, String emplacementEtagereCmd, int quantiteDemandeCmd)
+    public Article( int id, String nomCmd, String codeBarreCmd, String alleeCmd, String etagereCmd, String emplacementEtagereCmd, int quantiteDemandeCmd)
     {
+        idArticle = id;
         nom = nomCmd;
         codeBarre = codeBarreCmd;
         allee = alleeCmd;
@@ -45,6 +48,8 @@ public class Article {
         emplacementEtagere = emplacementEtagereCmd;
         quantiteDemande = quantiteDemandeCmd;
         quantitePrise = 0;
+
+        System.out.println("------------------- ARTICLE "+ idArticle + " nom "+ nom);
     }
 
 
@@ -134,6 +139,15 @@ public class Article {
     public String toString()
     {
         return ("Article " + nom + " codebarre = "+ codeBarre);
+    }
+
+
+    /**
+     * Récupère l'identifiant de l'article
+     * @return l'identifiant de l'article (int)
+     */
+    public int getIdArticle() {
+        return idArticle;
     }
 
 }

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import pfe.polytech.Vuzix_M100_entrepot.Connexionasync;
+import pfe.polytech.Vuzix_M100_entrepot.R;
 
 /**
  * Cette classe correspond à une commande.
@@ -45,6 +46,7 @@ public class Commande {
     private static final String ID_CMD_JSON_KEY = "Idcommande";
     private static final String DEPOT_JSON_KEY = "Depot";
     private static final String ENTREPOT_JSON_KEY = "Entrepot";
+    private static final String ID_ARTICLE ="Idarticle";
 
 
     /**
@@ -105,7 +107,7 @@ public class Commande {
                 // Récupère le JSON d'un article
                 JSONObject jsonArticle = new JSONObject(jsonObj.getString(nbArticle));
                 // Creer l'article correspondant
-                Article article = new Article(jsonArticle.getString("nom"), jsonArticle.getString("nbcpdebarre"), jsonArticle.getString("allee"), jsonArticle.getString("etagere"), jsonArticle.getString("emplacement"), Integer.parseInt(jsonArticle.getString("quantite")));
+                Article article = new Article(Integer.parseInt( jsonArticle.getString(ID_ARTICLE)), jsonArticle.getString("nom"), jsonArticle.getString("nbcpdebarre"), jsonArticle.getString("allee"), jsonArticle.getString("etagere"), jsonArticle.getString("emplacement"), Integer.parseInt(jsonArticle.getString("quantite")));
                 // Ajoute cette article à la liste
                 list_article.add(article);
                 // Passe à l'article suivant
@@ -143,7 +145,12 @@ public class Commande {
      */
     public boolean checkQuantite( int quantite)
     {
-        return articleList.get( ptrArticleList).compareQuantite( quantite);
+        boolean quantiteOk = articleList.get( ptrArticleList).compareQuantite( quantite);
+        if(! quantiteOk)
+        {
+            //this.erreurCommande( "La quantité du panier insufisante pour l'atricle "+ articleList.get( ptrArticleList).getNom(), articleList.get( ptrArticleList).get);
+        }
+        return quantiteOk;
     }
 
     /**
