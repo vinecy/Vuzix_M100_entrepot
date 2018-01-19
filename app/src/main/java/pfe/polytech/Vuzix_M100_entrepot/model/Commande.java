@@ -75,7 +75,8 @@ public class Commande {
      */
     public static Commande chargerCommande( Utilisateur preparateurBdd) throws JSONException {
         Connexionasync connexion = new Connexionasync();
-        connexion.execute("http://bartholomeau.fr/recevoir_commande.php?cb=" + preparateurBdd.getCodeBarre());
+        //connexion.execute("http://bartholomeau.fr/recevoir_commande.php?cb=" + preparateurBdd.getCodeBarre());
+        connexion.execute("http://bartholomeau.fr/test.php?cb=" + preparateurBdd.getCodeBarre());
         try {
             Log.d("commande","message "+connexion.get());
         } catch (InterruptedException e) {
