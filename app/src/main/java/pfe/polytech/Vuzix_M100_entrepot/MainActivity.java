@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -17,9 +19,12 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -212,6 +217,11 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 textview_ptr.setText( "CodeBarre : " + userCmdObj.getCommande().getArticleCourrant().getCodeBarre());
                 textview_ptr = findViewById(R.id.distance);
                 textview_ptr.setText( "CodeBarre : " + distance);
+                byte[] decodedString = Base64.decode(userCmdObj.getCommande().getArticleCourrant().getImage(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                ImageView img = (ImageView)findViewById(R.id.imgProduit);
+                img.setImageBitmap(decodedByte);
+
                 break;
             case SEARCH_PRODUCT:
                 //Toast.makeText(getApplicationContext(), " > SEARCH_PRODUCT",Toast.LENGTH_SHORT).show();
@@ -283,6 +293,8 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 textview_ptr.setText( "" );
                 textview_ptr = findViewById(R.id.distance);
                 textview_ptr.setText( distance + "m");
+                Button missingBtn = findViewById(R.id.missingButton);
+                missingBtn.setVisibility(View.INVISIBLE);
                 break;
             case COMMAND_ENDED:
                 //Toast.makeText(getApplicationContext(), " > COMMAND_ENDED",Toast.LENGTH_SHORT).show();
@@ -399,6 +411,13 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         switch (app_state) {
             case SEARCH_COMMAND:
                 etatObj.setEtat( EtatSingleton.App_State.NAVIGATION1);
+                changeState();
+                break;
+            case NAVIGATION1:
+                scan(view);
+                break;
+            case NAVIGATION2:
+                etatObj.setEtat( EtatSingleton.App_State.COMMAND_ENDED);
                 changeState();
                 break;
             case QUANTITY_INPUT:

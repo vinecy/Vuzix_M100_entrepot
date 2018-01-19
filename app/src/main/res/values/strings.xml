@@ -31,4 +31,5 @@
     <string name="user_finded">Utilisateur trouvé</string>
     <string name="welcome">Bienvenue</string>
     <string name="goto_depot">Déposer commande fini.</string>
+    <string name="missing">Manquant</string>
 </resources>

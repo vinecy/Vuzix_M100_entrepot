@@ -77,8 +77,8 @@ public class Commande {
      */
     public static Commande chargerCommande( Utilisateur preparateurBdd) throws JSONException {
         Connexionasync connexion = new Connexionasync();
-        //connexion.execute("http://bartholomeau.fr/recevoir_commande.php?cb=" + preparateurBdd.getCodeBarre());
-        connexion.execute("http://bartholomeau.fr/test.php?cb=" + preparateurBdd.getCodeBarre());
+        connexion.execute("http://bartholomeau.fr/recevoir_commande.php?cb=" + preparateurBdd.getCodeBarre());
+        //connexion.execute("http://bartholomeau.fr/test.php?cb=" + preparateurBdd.getCodeBarre());
         try {
             Log.d("commande","message "+connexion.get());
         } catch (InterruptedException e) {
@@ -107,7 +107,7 @@ public class Commande {
                 // Récupère le JSON d'un article
                 JSONObject jsonArticle = new JSONObject(jsonObj.getString(nbArticle));
                 // Creer l'article correspondant
-                Article article = new Article(Integer.parseInt( jsonArticle.getString(ID_ARTICLE)), jsonArticle.getString("nom"), jsonArticle.getString("nbcpdebarre"), jsonArticle.getString("allee"), jsonArticle.getString("etagere"), jsonArticle.getString("emplacement"), Integer.parseInt(jsonArticle.getString("quantite")));
+                Article article = new Article(Integer.parseInt( jsonArticle.getString(ID_ARTICLE)), jsonArticle.getString("nom"), jsonArticle.getString("nbcpdebarre"), jsonArticle.getString("allee"), jsonArticle.getString("etagere"), jsonArticle.getString("emplacement"), Integer.parseInt(jsonArticle.getString("quantite")), jsonArticle.getString("image"));
                 // Ajoute cette article à la liste
                 list_article.add(article);
                 // Passe à l'article suivant

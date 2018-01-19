@@ -26,6 +26,8 @@ public class Article {
     /** identifiant de l'article (base de données)*/
     private int idArticle;
 
+    private String image;
+
 
     /**
      * Constructeur de l'objet article.
@@ -38,7 +40,7 @@ public class Article {
      * @param emplacementEtagereCmd Emplacement du produit : Emplacement sur l'étagère
      * @param quantiteDemandeCmd Quantité souhaité par le client et demandé dans une commande définis
      */
-    public Article( int id, String nomCmd, String codeBarreCmd, String alleeCmd, String etagereCmd, String emplacementEtagereCmd, int quantiteDemandeCmd)
+    public Article( int id, String nomCmd, String codeBarreCmd, String alleeCmd, String etagereCmd, String emplacementEtagereCmd, int quantiteDemandeCmd, String image)
     {
         idArticle = id;
         nom = nomCmd;
@@ -48,6 +50,9 @@ public class Article {
         emplacementEtagere = emplacementEtagereCmd;
         quantiteDemande = quantiteDemandeCmd;
         quantitePrise = 0;
+        this.image = image;
+
+        System.out.println("------------------- ARTICLE "+ idArticle + " nom "+ nom);
     }
 
 
@@ -148,4 +153,11 @@ public class Article {
         return idArticle;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
