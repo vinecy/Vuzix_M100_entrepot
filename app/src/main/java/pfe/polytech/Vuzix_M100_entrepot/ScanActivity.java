@@ -127,14 +127,14 @@ public class ScanActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onPause() {
-        Toast.makeText(getApplicationContext(), "ScanActivity.onPause()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "ScanActivity.onPause()", Toast.LENGTH_SHORT).show();
         super.onPause();
         mScannerView.stopCamera();
     }
 
     @Override
     protected void onResume(){
-        Toast.makeText(getApplicationContext(), "ScanActivity.onResume()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "ScanActivity.onResume()", Toast.LENGTH_SHORT).show();
         super.onResume();
         mScannerView.setResultHandler(this);
         mScannerView.startCamera();
@@ -142,19 +142,19 @@ public class ScanActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onStop(){
-        Toast.makeText(getApplicationContext(), "ScanActivity.onStop()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "ScanActivity.onStop()", Toast.LENGTH_SHORT).show();
         super.onStop();
     }
 
     @Override
     protected void onRestart(){
-        Toast.makeText(getApplicationContext(), "ScanActivity.onRestart()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "ScanActivity.onRestart()", Toast.LENGTH_SHORT).show();
         super.onRestart();
     }
 
     @Override
     protected void onDestroy(){
-        Toast.makeText(getApplicationContext(), "ScanActivity.onDestroy()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "ScanActivity.onDestroy()", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 }

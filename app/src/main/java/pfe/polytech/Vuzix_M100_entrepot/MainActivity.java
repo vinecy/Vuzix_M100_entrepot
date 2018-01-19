@@ -54,8 +54,8 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
     private EtatSingleton.App_State app_state ;                                         // Etat de l'application
     private String codeBarre_scanned = "";                                              // Code barre scannée
     private TextView textview_ptr;
-    private float orientation;
-    private int distance;
+    private float orientation = 60;
+    private int distance = 155;
     // Elements de la vue
     private CompassView compassView;
     private SensorManager sensorManager;
@@ -145,9 +145,10 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 // SI AVEC CONNECTION SERVEUR : DECOMENTER LA LIGNE EN-DESSOUS
                 Utilisateur user = Utilisateur.verifieUtilisateur(codeBarre_scanned);
                 // SI SANS CONNECTION SERVEUR : DECOMMENTER LA LIGNE EN-DESSOUS
-                //Utilisateur user = new Utilisateur("John Smith", codeBarre_scanned);
+                // Utilisateur user = new Utilisateur("John Smith", codeBarre_scanned);
                 if( user != null ){             // si utilisateur trouvé
                     userCmdObj.setUtilisateur(user);
+                    Toast.makeText(getApplicationContext(), "Welcome " + userCmdObj.getUtilisateur().getNom().toString(), Toast.LENGTH_SHORT).show();
                     etatObj.setEtat( EtatSingleton.App_State.SEARCH_COMMAND);
                     changeState( );
                 } else {                        // sinon on relance le scan
@@ -169,14 +170,16 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                     Commande commandeTmp = Commande.chargerCommande(userCmdObj.getUtilisateur());
 
                     // SANS SERVEUR
-                    /*ArrayList<Article> liste = new ArrayList<>();
-                    //Article a1 = new Article("Fromage Blanc","2154632156234","A","26","C",1);
+                    /*
+                    ArrayList<Article> liste = new ArrayList<>();
+                    Article a1 = new Article("Fromage Blanc","2154632156234","A","26","C",1);
                     Article a2 = new Article("Pizza","2145622145659","B","27","D",3);
-                    //liste.add(a1);
+                    liste.add(a1);
                     liste.add(a2);
                     Commande commandeTmp;
-                    commandeTmp = new Commande(13,liste,"dqsfqsf","qfqsf",userCmdObj.getUtilisateur());*/
 
+                    commandeTmp = new Commande(13,liste,"dqsfqsf","qfqsf",userCmdObj.getUtilisateur());
+                    */
                     //Change la commande en cours
                     userCmdObj.setCommande( commandeTmp);
 
@@ -207,16 +210,8 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 textview_ptr.setText( "x " + userCmdObj.getCommande().getArticleCourrant().getQuantiteDemande());
                 textview_ptr = findViewById(R.id.product_ref);
                 textview_ptr.setText( "CodeBarre : " + userCmdObj.getCommande().getArticleCourrant().getCodeBarre());
-                /*
-                textview_ptr = findViewById(R.id.product_aisle);
-                textview_ptr.setText(userCmdObj.getCommande().getArticleCourrant().getAllee());
-                textview_ptr = findViewById(R.id.product_rack);
-                textview_ptr.setText(userCmdObj.getCommande().getArticleCourrant().getEtagere());
-                textview_ptr = findViewById(R.id.product_rack_location);
-                textview_ptr.setText(userCmdObj.getCommande().getArticleCourrant().getEmplacementEtagere());
-                textview_ptr = findViewById(R.id.username);
-                textview_ptr.setText(userCmdObj.getUtilisateur().getNom());
-                */
+                textview_ptr = findViewById(R.id.distance);
+                textview_ptr.setText( "CodeBarre : " + distance);
                 break;
             case SEARCH_PRODUCT:
                 //Toast.makeText(getApplicationContext(), " > SEARCH_PRODUCT",Toast.LENGTH_SHORT).show();
@@ -276,11 +271,18 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 });
                 break;
             case NAVIGATION2:
-                //Toast.makeText(getApplicationContext(), " > NAVIGATION2",Toast.LENGTH_SHORT).show();
-                // TODO (pour val) : ecran navigation pour le depot
-                //setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
-                etatObj.setEtat( EtatSingleton.App_State.COMMAND_ENDED);
-                changeState( );
+                setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
+                compassView = (CompassView)findViewById(R.id.boussole);
+                textview_ptr = findViewById(R.id.product_name);
+                textview_ptr.setText( R.string.goto_depot );
+                textview_ptr = findViewById(R.id.product_location);
+                textview_ptr.setText( userCmdObj.getCommande().getDepot() );
+                textview_ptr = findViewById(R.id.product_quantity);
+                textview_ptr.setText( "" );
+                textview_ptr = findViewById(R.id.product_ref);
+                textview_ptr.setText( "" );
+                textview_ptr = findViewById(R.id.distance);
+                textview_ptr.setText( distance + "m");
                 break;
             case COMMAND_ENDED:
                 //Toast.makeText(getApplicationContext(), " > COMMAND_ENDED",Toast.LENGTH_SHORT).show();
@@ -378,6 +380,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
             case SEARCH_COMMAND:
                 etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
                 changeState( );
+                break;
             case NAVIGATION1:
             case NAVIGATION2:
                 Toast.makeText(getApplicationContext(), R.string.cannot_quit_command_pending, Toast.LENGTH_SHORT).show();
@@ -448,13 +451,13 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onPause() {
-        Toast.makeText(getApplicationContext(), "MainActivity.onPause()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "MainActivity.onPause()", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
 
     @Override
     protected void onResume(){
-        Toast.makeText(getApplicationContext(), "MainActivity.onResume()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "MainActivity.onResume()", Toast.LENGTH_SHORT).show();
         super.onResume();
         // Lie evenement de la boussole numérique au listener
         sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -462,7 +465,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onStop(){
-        Toast.makeText(getApplicationContext(), "MainActivity.onStop()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "MainActivity.onStop()", Toast.LENGTH_SHORT).show();
         super.onStop();
         // Retire lien entre listener et evenements de la boussole numérique
         sensorManager.unregisterListener(sensorListener);
@@ -470,13 +473,13 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onRestart(){
-        Toast.makeText(getApplicationContext(), "MainActivity.onRestart()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "MainActivity.onRestart()", Toast.LENGTH_SHORT).show();
         super.onRestart();
     }
 
     @Override
     protected void onDestroy(){
-        Toast.makeText(getApplicationContext(), "MainActivity.onDestroy()", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "MainActivity.onDestroy()", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 }
