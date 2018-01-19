@@ -118,6 +118,8 @@ public class Commande {
             }
             // Creation de la commande
             Commande cmd = new Commande(Integer.parseInt(idCmd), list_article, depot, ent, preparateurBdd);
+            //cmd.envoieCommandeEnCours();
+
             return cmd;
         } else {
             return null;
@@ -148,7 +150,7 @@ public class Commande {
         boolean quantiteOk = articleList.get( ptrArticleList).compareQuantite( quantite);
         if(! quantiteOk)
         {
-            //this.erreurCommande( "La quantité du panier insufisante pour l'atricle "+ articleList.get( ptrArticleList).getNom(), articleList.get( ptrArticleList).get);
+            this.erreurCommande( "quantite_insufisante", String.valueOf( articleList.get( ptrArticleList).getIdArticle()));
         }
         return quantiteOk;
     }
@@ -167,6 +169,7 @@ public class Commande {
         }
         //Sinon, s'il n'y plus d'article à ajouter au "panier"
         else {
+           // this.FinCommande();
             return null;
         }
     }
@@ -175,7 +178,6 @@ public class Commande {
 
     /**
      * Envoie au serveur l'identité (via le code barre) du préparateur associé à cette commande.
-     * TODO: (Pour Zied) => envoyé au serveur le prep associé a la cmd + stocker dans bdd
      */
     public void envoieCommandeEnCours()
     {
@@ -189,7 +191,6 @@ public class Commande {
 
     /**
      * Signal au serveur que la commande est terminé.
-     * TODO: Zied => envoyé et mettre a jour dans bdd
      */
     public void FinCommande()
     {
@@ -203,14 +204,14 @@ public class Commande {
     /**
      * Envoie au serveur l'evenement concernant la commande et l'article en cours.
      * @param typeEvenement Message explicitant l'erreur survenu dans la commande
-     * TODO Zied => ajouter dans bdd
      */
     public void erreurCommande( String typeEvenement ,String idArticle)
     {
         Connexionasync connexion = new Connexionasync();
         int codeBarrePrep = this.getPreparateur().getIdUser();
+        String identifiant = this.getPreparateur().getCodeBarre();
         int idCommande= this.getId();
-        String url=("http://bartholomeau.fr/evenement.php?codeBarrePrep="+codeBarrePrep+"&idCommande="+idCommande+"&idArticle="+idArticle+"&typeEvenement="+typeEvenement);
+        String url=("http://bartholomeau.fr/evenement.php?identifiant="+identifiant+"&idPreparateur="+codeBarrePrep+"&idCommande="+idCommande+"&idArticle="+idArticle+"&typeEvenement="+typeEvenement);
         connexion.execute(url);
     }
 
