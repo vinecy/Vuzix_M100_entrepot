@@ -200,13 +200,9 @@ public class Commande {
     public void erreurCommande( String typeEvenement ,String idArticle)
     {
         Connexionasync connexion = new Connexionasync();
-        //TODO: passer l'id du preparateur au lieu du code barre
-        String codeBarrePrep = this.getPreparateur().getCodeBarre();
+        int codeBarrePrep = this.getPreparateur().getIdUser();
         int idCommande= this.getId();
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        Date date = Calendar.getInstance().getTime();
-        String timeStamp = df.format(date);
-        String url=("http://bartholomeau.fr/evenement.php?timeStamp="+timeStamp+"&codeBarrePrep="+codeBarrePrep+"&idCommande="+idCommande+"&idArticle="+idArticle+"&typeEvenement="+typeEvenement);
+        String url=("http://bartholomeau.fr/evenement.php?codeBarrePrep="+codeBarrePrep+"&idCommande="+idCommande+"&idArticle="+idArticle+"&typeEvenement="+typeEvenement);
         connexion.execute(url);
     }
 
