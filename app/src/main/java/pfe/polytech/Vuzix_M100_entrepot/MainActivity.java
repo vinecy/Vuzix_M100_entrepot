@@ -434,6 +434,21 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
     }
 
     /**
+     * Fonction appelé lorsqu'un article est manquant.
+     * @param view
+     */
+    public void articleManquant(View view){
+        userCmdObj.getCommande().checkQuantite(0);
+        if (userCmdObj.getCommande().ArticleSuivant() != null) {
+            etatObj.setEtat(EtatSingleton.App_State.NAVIGATION1);
+            changeState();
+        } else {
+            etatObj.setEtat(EtatSingleton.App_State.NAVIGATION2);
+            changeState();
+        }
+    }
+
+    /**
      * Permet de quitter l'application. Appelé par appui sur buttonEXIT de la vue activity_main
      * @param view vue où est appelé la méthode
      */

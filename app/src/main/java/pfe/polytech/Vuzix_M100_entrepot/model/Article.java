@@ -48,8 +48,6 @@ public class Article {
         emplacementEtagere = emplacementEtagereCmd;
         quantiteDemande = quantiteDemandeCmd;
         quantitePrise = 0;
-
-        System.out.println("------------------- ARTICLE "+ idArticle + " nom "+ nom);
     }
 
 

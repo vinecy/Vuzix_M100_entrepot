@@ -147,7 +147,7 @@ public class Commande {
         boolean quantiteOk = articleList.get( ptrArticleList).compareQuantite( quantite);
         if(! quantiteOk)
         {
-            //this.erreurCommande( "La quantité du panier insufisante pour l'atricle "+ articleList.get( ptrArticleList).getNom(), articleList.get( ptrArticleList).get);
+            this.erreurCommande( "La quantité du panier insufisante pour l'atricle "+ articleList.get( ptrArticleList).getNom(), String.valueOf( articleList.get( ptrArticleList).getIdArticle()));
         }
         return quantiteOk;
     }
