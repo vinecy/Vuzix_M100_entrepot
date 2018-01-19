@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import pfe.polytech.Vuzix_M100_entrepot.Connexionasync;
@@ -20,16 +22,20 @@ public class Utilisateur  {
     private String nom;
     /** Code barre associé à l'utilisateur*/
     private String codeBarre;
+    /** Id de l'utilisateur (base de données)*/
+    private int idUser;
 
     /**
      * Constructeur de la classe Utilisateur
      * @param nomUser Nom de l'utilisateur
      * @param CodeBarreUser Code barre associé à l'utilisateur
+     *  //Todo: ajouter id user dans le constructeur
      */
-    public Utilisateur( String nomUser, String CodeBarreUser)
+    public Utilisateur( String id, String nomUser, String CodeBarreUser)
     {
         nom = nomUser;
         codeBarre = CodeBarreUser;
+        idUser = Integer.parseInt(id);
     }
 
 
@@ -39,6 +45,7 @@ public class Utilisateur  {
      * Retourne un booléen True si l'utilisateur existe, false sinon.
      * @param codeBarreLunette code barre vu par les lunettes
      * @return True si l'utilisateur existe, false sinon.
+     * //TODO: ajouter l'id dans le JSON
      */
     public static Utilisateur verifieUtilisateur( String codeBarreLunette)
     {
@@ -58,8 +65,8 @@ public class Utilisateur  {
         else
         {
             //position de la premiere virgule
-            int index1 = connexion.getResult().indexOf(",");
-            Utilisateur user = new Utilisateur(connexion.getResult().substring(0,index1),connexion.getResult().substring(index1+1));
+            List<String> listUser = Arrays.asList( connexion.getResult().split(","));
+            Utilisateur user = new Utilisateur(listUser.get(0),listUser.get(1), listUser.get(2));
             return user;
         }
     }
@@ -79,6 +86,14 @@ public class Utilisateur  {
      */
     public String getCodeBarre() {
         return codeBarre;
+    }
+
+    /**
+     * Récupère l'id de l'utilisateur des lunettes
+     * @return l'id de l'utilisateur des lunettes ( int)
+     */
+    public int getIdUser() {
+        return idUser;
     }
 
 

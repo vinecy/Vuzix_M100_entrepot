@@ -373,7 +373,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         switch (app_state) {
             case INIT:
             case SIGN_IN:
-                Toast.makeText(getApplicationContext(), R.string.exit_pending, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), R.string.exit_pending, Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case SEARCH_USER:
@@ -383,7 +383,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 break;
             case NAVIGATION1:
             case NAVIGATION2:
-                Toast.makeText(getApplicationContext(), R.string.cannot_quit_command_pending, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), R.string.cannot_quit_command_pending, Toast.LENGTH_SHORT).show();
                 break;
             case QUANTITY_INPUT:
                 etatObj.setEtat( EtatSingleton.App_State.NAVIGATION1);
