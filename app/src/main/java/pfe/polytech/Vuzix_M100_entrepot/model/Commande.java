@@ -210,7 +210,7 @@ public class Commande {
         int codeBarrePrep = this.getPreparateur().getIdUser();
         String identifiant = this.getPreparateur().getCodeBarre();
         int idCommande= this.getId();
-        String url=("http://bartholomeau.fr/evenement.php?identifiant="+identifiant+"&codeBarrePrep="+codeBarrePrep+"&idCommande="+idCommande+"&idArticle="+idArticle+"&typeEvenement="+typeEvenement);
+        String url=("http://bartholomeau.fr/evenement.php?identifiant="+identifiant+"&idPreparateur="+codeBarrePrep+"&idCommande="+idCommande+"&idArticle="+idArticle+"&typeEvenement="+typeEvenement);
         connexion.execute(url);
     }
 
