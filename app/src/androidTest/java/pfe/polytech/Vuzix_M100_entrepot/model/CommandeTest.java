@@ -22,16 +22,16 @@ public class CommandeTest {
     @Test
     public void articleSuivantTest() throws Exception {
         //Liste d'articles
-        Article test1 = new Article( "Machine 1","123456789", "A","5","102",2);
-        Article test2 = new Article( "Machine 2","15263", "A","5","103",1);
-        Article test3 = new Article( "Machine 3","15486532184", "A","5","105",5);
+        Article test1 = new Article( 1,"Machine 1","123456789", "A","5","102",2,"image");
+        Article test2 = new Article( 2,"Machine 2","15263", "A","5","103",1,"image");
+        Article test3 = new Article( 3,"Machine 3","15486532184", "A","5","105",5,"image");
         List< Article > list_article = new ArrayList< >();
         list_article.add( test1);
         list_article.add( test2);
         list_article.add( test3);
 
         // Utilisateur
-        Utilisateur user = new Utilisateur( "Nom1","1111111111111");
+        Utilisateur user = new Utilisateur( "1","Nom1","1111111111111");
         //Commande
         Commande cmd = new Commande(1,list_article,"depot","entrepot A",user);
 
@@ -52,16 +52,16 @@ public class CommandeTest {
     @Test
     public void checkArticleTest(){
         //Liste d'articles
-        Article test1 = new Article( "Machine 1","123456789", "A","5","102",2);
-        Article test2 = new Article( "Machine 2","15263", "A","5","103",1);
-        Article test3 = new Article( "Machine 3","15486532184", "A","5","105",5);
+        Article test1 = new Article( 1,"Machine 1","123456789", "A","5","102",2,"image");
+        Article test2 = new Article( 2,"Machine 2","15263", "A","5","103",1,"image");
+        Article test3 = new Article( 3,"Machine 3","15486532184", "A","5","105",5, "image");
         List< Article > list_article = new ArrayList< >();
         list_article.add( test1);
         list_article.add( test2);
         list_article.add( test3);
 
         // Utilisateur
-        Utilisateur user = new Utilisateur( "Nom1","1111111111111");
+        Utilisateur user = new Utilisateur( "1","Nom1","1111111111111");
         //Commande
         Commande cmd = new Commande(1,list_article,"depot","entrepot A",user);
 
@@ -81,16 +81,16 @@ public class CommandeTest {
     @Test
     public void checkQuantiteTest(){
         //Liste d'articles
-        Article test1 = new Article( "Machine 1","123456789", "A","5","102",2);
-        Article test2 = new Article( "Machine 2","15263", "A","5","103",1);
-        Article test3 = new Article( "Machine 3","15486532184", "A","5","105",5);
+        Article test1 = new Article( 1,"Machine 1","123456789", "A","5","102",2, "image");
+        Article test2 = new Article( 2,"Machine 2","15263", "A","5","103",1, "image");
+        Article test3 = new Article( 3,"Machine 3","15486532184", "A","5","105",5, "image");
         List< Article > list_article = new ArrayList< >();
         list_article.add( test1);
         list_article.add( test2);
         list_article.add( test3);
 
         // Utilisateur
-        Utilisateur user = new Utilisateur( "Nom1","1111111111111");
+        Utilisateur user = new Utilisateur( "1","Nom1","1111111111111");
         //Commande
         Commande cmd = new Commande(1,list_article,"depot","entrepot A",user);
 
