@@ -4,20 +4,23 @@ import pfe.polytech.Vuzix_M100_entrepot.model.Commande;
 import pfe.polytech.Vuzix_M100_entrepot.model.Utilisateur;
 
 /**
- * Created by ju on 21/12/2017.
+ * Utilisateur et commande en cours.
+ * Cette classe contient l'utilisateur actuel de l'appication ainsi que la commande en cours.
+ * Il s'agit d'un singleton.
  */
 
 public class UserCommandeSingleton {
 
-    //Utilisateur en cours
+    /** Utilisateur en cours*/
     private Utilisateur user;
-    //Commande en cours
+    /** Commande en cours*/
     private Commande cmd;
-    //Objet de la classe singleton
+    /** Objet de la classe singleton*/
     private static UserCommandeSingleton instance = null;
 
     /**
-     * Constructeur : initialisation à l'état de départ (INIT)
+     * Constructeur : initialisation de l'utilisateur et de la commande
+     * Les objets initialisés sont vides.
      */
     private UserCommandeSingleton()
     {
@@ -28,7 +31,7 @@ public class UserCommandeSingleton {
     /**
      * Creation ou récupération de l'objet singleton
      * Attention : les objets créer dans cette classe sont nulle!
-     * @return l'objet Singleton. Si l'objet n'existe pas la commande et l'utilisateur sont vide.
+     * @return l'objet Singleton. Si l'objet n'existe pas la commande et l'utilisateur sont vides.
      */
     public final static UserCommandeSingleton getSingleton() {
         if ( instance == null)
@@ -45,7 +48,6 @@ public class UserCommandeSingleton {
      */
     public Commande setCommande( Commande newCmd)
     {
-
         instance.cmd = newCmd;
         return instance.cmd;
     }

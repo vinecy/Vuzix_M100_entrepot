@@ -13,7 +13,8 @@ import pfe.polytech.Vuzix_M100_entrepot.Connexionasync;
 /**
  * Cette classe correspond à un utilisateur des lunettes.
  *
- * Elle comprend son nom et le code barre qui lui ai associé
+ * Elle comprend son nom et le code barre qui lui ai associé.
+ *
  */
 
 public class Utilisateur  {
@@ -22,7 +23,7 @@ public class Utilisateur  {
     private String nom;
     /** Code barre associé à l'utilisateur*/
     private String codeBarre;
-    /** Id de l'utilisateur (base de données)*/
+    /** Identifiant de l'utilisateur (base de données)*/
     private int idUser;
 
     /**
@@ -40,7 +41,7 @@ public class Utilisateur  {
 
 
     /**
-     * Vérifie dans la base de données si l'utilisateur existe via son code barre.
+     * Vérifie dans la base de données (du serveur) si l'utilisateur existe via son code barre.
      * Si l'utilisateur existe, créer un objet utilisateur.
      * Retourne un booléen True si l'utilisateur existe, false sinon.
      * @param codeBarreLunette code barre vu par les lunettes
@@ -49,6 +50,7 @@ public class Utilisateur  {
     public static Utilisateur verifieUtilisateur( String codeBarreLunette)
     {
         Connexionasync connexion = new Connexionasync();
+        //Connexion au serveur
         connexion.execute("http://bartholomeau.fr/indentification.php?cb="+codeBarreLunette);
         try {
             Log.d("utilisateur","message "+connexion.get());
@@ -57,10 +59,12 @@ public class Utilisateur  {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        //Si aucun utilisateur est associé au code barre
         if(connexion.getResult().equals("false"))
         {
             return null;
         }
+        //Si un utilisateur a été trouvé
         else
         {
             //Sépare le string en fonction des virgule

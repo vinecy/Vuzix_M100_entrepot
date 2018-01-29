@@ -4,7 +4,7 @@ package pfe.polytech.Vuzix_M100_entrepot.model;
  * Cette classe représente les articles d'une commande.
  *
  * Un article possède un nom, un code barre, les informations de localisation
- * et les quantités demandé dans la commande et prise par l'utilisateur.
+ * et les quantités demandées dans la commande et prise par l'utilisateur.
  */
 
 public class Article {
@@ -25,7 +25,7 @@ public class Article {
     private int quantitePrise;
     /** identifiant de l'article (base de données)*/
     private int idArticle;
-
+    /** Image associée à l'article */
     private String image;
 
 
@@ -51,8 +51,6 @@ public class Article {
         quantiteDemande = quantiteDemandeCmd;
         quantitePrise = 0;
         this.image = image;
-
-        System.out.println("------------------- ARTICLE "+ idArticle + " nom "+ nom);
     }
 
 
@@ -138,6 +136,7 @@ public class Article {
         return quantitePrise;
     }
 
+
     @Override
     public String toString()
     {
@@ -153,10 +152,18 @@ public class Article {
         return idArticle;
     }
 
+    /**
+     * Récupère l'image associé à l'article
+     * @return l'image de l'article (sous une chaine de caractères)
+     */
     public String getImage() {
         return image;
     }
 
+    /**
+     * Modifie l'image associé à l'article
+     * @param image la nouvelle image de l'article (sous une chaine de caractères)
+     */
     public void setImage(String image) {
         this.image = image;
     }

@@ -43,23 +43,25 @@ import pfe.polytech.Vuzix_M100_entrepot.model.Utilisateur;
 
 
 /**
- * Classe lançant le code de l'application
+ * Classe lançant le code de l'application (ACTIVITE PRINCIPAL)
  */
-public class MainActivity extends Activity implements ZBarScannerView.ResultHandler//ZXingScannerView.ResultHandler
+public class MainActivity extends Activity implements ZBarScannerView.ResultHandler
 {
-    //Code correspondant à la caméra activé
+    /** Code correspondant à la caméra activé*/
     private static final int ZBAR_CAMERA_PERMISSION = 1;
 
     // ATTRIBUTS
-    // Elements du MODELE
-    private UserCommandeSingleton userCmdObj = UserCommandeSingleton.getSingleton();    // Singleton associant l'utilisateur à une commande
+    /**  Elements du MODELE : Singleton associant l'utilisateur à une commande*/
+    private UserCommandeSingleton userCmdObj = UserCommandeSingleton.getSingleton();
     // Elements du CONTROLEUR
-    private int myPID ;
-    private EtatSingleton etatObj = EtatSingleton.getSingleton();                       // Singleton possedant l'état en cours
-    private EtatSingleton.App_State app_state ;                                         // Etat de l'application
-    private String codeBarre_scanned = "";                                              // Code barre scannée
+    /** Singleton possedant l'état en cours*/
+    private EtatSingleton etatObj = EtatSingleton.getSingleton();
+    /** Etat de l'application*/
+    private EtatSingleton.App_State app_state ;
+    /** Code barre scannée*/
+    private String codeBarre_scanned = "";
+    /** Pointeur sur les textView des vues (IHM)*/
     private TextView textview_ptr;
-    private float orientation = 60;
     private int distance = 155;
     // Elements de la vue
     private CompassView compassView;

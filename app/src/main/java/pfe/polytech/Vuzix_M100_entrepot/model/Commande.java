@@ -22,6 +22,7 @@ import pfe.polytech.Vuzix_M100_entrepot.R;
  * Elle comprend une liste d'objets Articles, l'entrepot où se déroule la commande, l'endroit de dépot,
  * l'identité du préparateur de commande ainsi que l'identifiant de cette commande.
  *
+ * Une commande est récupérer sur le serveur grâce à l'identifiaction de l'utilisateur.
  */
 
 public class Commande {
@@ -42,10 +43,13 @@ public class Commande {
     private int ptrArticleList;
 
 
-    /** Clef du fichier JSON renvoyé par le serveur*/
+    /** Clef du fichier JSON renvoyé par le serveur : identifiant de la commande*/
     private static final String ID_CMD_JSON_KEY = "Idcommande";
+    /** Clef du fichier JSON renvoyé par le serveur : le dépôt de la commande*/
     private static final String DEPOT_JSON_KEY = "Depot";
+    /** Clef du fichier JSON renvoyé par le serveur : entrepôt de la commande*/
     private static final String ENTREPOT_JSON_KEY = "Entrepot";
+    /** Clef du fichier JSON renvoyé par le serveur : identifiant d'un article*/
     private static final String ID_ARTICLE ="Idarticle";
 
 
@@ -71,14 +75,14 @@ public class Commande {
 
     /**
      * Récupère la commande (JSON) depuis le serveur.
+     * Une commande n'est récupéré que si l'utilisateur existe.
      * @param preparateurBdd l'utilisateur des lunettes
-     * @return La commande sous un format JSON
-     * TODO: + verif que ya pas d'evenement pour cette commande
+     * @return La commande sous un format JSON. Si une erreur est survenue, la commande sera nulle.
      */
     public static Commande chargerCommande( Utilisateur preparateurBdd) throws JSONException {
         Connexionasync connexion = new Connexionasync();
+        //Connexion au serveur avec le code barre de l'utilisateur
         connexion.execute("http://bartholomeau.fr/recevoir_commande.php?cb=" + preparateurBdd.getCodeBarre());
-        //connexion.execute("http://bartholomeau.fr/test.php?cb=" + preparateurBdd.getCodeBarre());
         try {
             Log.d("commande","message "+connexion.get());
         } catch (InterruptedException e) {
@@ -119,7 +123,6 @@ public class Commande {
             // Creation de la commande
             Commande cmd = new Commande(Integer.parseInt(idCmd), list_article, depot, ent, preparateurBdd);
             //cmd.envoieCommandeEnCours();
-
             return cmd;
         } else {
             return null;
@@ -134,7 +137,6 @@ public class Commande {
      */
     public boolean checkArticle( String codeBarre)
     {
-        System.out.println("TEST DANS CHECK ARTICLE!!!!");
         return articleList.get( ptrArticleList).compareCodeBarre( codeBarre);
     }
 
@@ -178,6 +180,7 @@ public class Commande {
 
     /**
      * Envoie au serveur l'identité (via le code barre) du préparateur associé à cette commande.
+     * Ainsi, la commande est associé à l'utilisateur dans le serveur.
      */
     public void envoieCommandeEnCours()
     {
@@ -204,6 +207,7 @@ public class Commande {
     /**
      * Envoie au serveur l'evenement concernant la commande et l'article en cours.
      * @param typeEvenement Message explicitant l'erreur survenu dans la commande
+     * @param idArticle L'identifiant de l'article dans la base de données
      */
     public void erreurCommande( String typeEvenement ,String idArticle)
     {
