@@ -64,10 +64,16 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
     private TextView textview_ptr;
     private int distance = 155;
     // Elements de la vue
+    /** Boussole (non utilisé dans l'application actuel)*/
     private CompassView compassView;
+    /** Gestionnaire de listener*/
     private SensorManager sensorManager;
+    /** Listener pour capter les événement du gyroscope*/
     private Sensor sensor;
 
+    /**
+     * Fonction pour la boussole
+     * */
     private final SensorEventListener sensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -75,7 +81,6 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 compassView.setNorthOrientation(event.values[SensorManager.DATA_X]);
             }
         }
-
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {}
     };
@@ -86,16 +91,11 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Toast.makeText(getApplicationContext(), "MainActivity.onCreate()", Toast.LENGTH_SHORT).show();
         super.onCreate(savedInstanceState);
         etatObj = EtatSingleton.getSingleton();                         // Récupétation de notre objet contenant l'état de l'application
         app_state = etatObj.getEtat();
-        //Toast.makeText(getApplicationContext(), ("etat : " + app_state), Toast.LENGTH_SHORT).show();
         if( app_state == EtatSingleton.App_State.INIT) {                // si on crée l'activité pour la première fois (correspond à l'état INIT)
-            //Toast.makeText(getApplicationContext(), "Initialisation", Toast.LENGTH_SHORT).show();
             etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);          // on passe à l'état d'authentification
-        } else {                                                        // sinon on garde l'état actuel de l'appli, donné par le singleton
-            //Toast.makeText(getApplicationContext(), "Reprise", Toast.LENGTH_SHORT).show();
         }
         userCmdObj = UserCommandeSingleton.getSingleton();
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
@@ -113,11 +113,8 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
      * Gestionnaire de resultat de l'application. Appeler lors le scan a trouvé un code barre.
      * badge
      */
-    //Todo: Enlever handleResult et le passer dans le scanActivity
     @Override
-    public void handleResult( Result result) {
-
-    }
+    public void handleResult( Result result) {}
 
     /**
      * Fonction qui permet de changer et effectue les traitements nécessaires correspondant
@@ -126,25 +123,17 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         app_state = etatObj.getEtat();
         switch (app_state) {
             case INIT:
-                //Toast.makeText(getApplicationContext(), " > INIT",Toast.LENGTH_SHORT).show();
                 codeBarre_scanned = "";
             case SIGN_IN:
-                //Toast.makeText(getApplicationContext(), " > SIGN_IN",Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.activity_main);
                 break;
             case SCAN_USER:
-                //Toast.makeText(getApplicationContext(), " > SCAN_USER",Toast.LENGTH_SHORT).show();
                 codeBarre_scanned = "";
-                //Toast.makeText(getApplicationContext(), R.string.show_barcode_badge,Toast.LENGTH_SHORT).show();
                 break;
             case SCAN_PRODUCT:
-                //Toast.makeText(getApplicationContext(), " > SCAN_PRODUCT",Toast.LENGTH_SHORT).show();
                 codeBarre_scanned = "";
-                //Toast.makeText(getApplicationContext(), R.string.show_barcode_product,Toast.LENGTH_SHORT).show();
                 break;
             case SEARCH_USER:
-                //Toast.makeText(getApplicationContext(), " > SCAN_USER",Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getApplicationContext(), R.string.search_user_pending,Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.command_coming);
                 textview_ptr = findViewById(R.id.actionPending);
                 textview_ptr.setText(R.string.search_user_pending);
@@ -166,8 +155,6 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 }
                 break;
             case SEARCH_COMMAND:
-                //Toast.makeText(getApplicationContext(), " > SEARCH_COMMAND",Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getApplicationContext(), R.string.search_command_pending,Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.command_coming);
                 textview_ptr = findViewById(R.id.username);
                 textview_ptr.setText(userCmdObj.getUtilisateur().getNom());
@@ -184,10 +171,10 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                     liste.add(a1);
                     liste.add(a2);
                     Commande commandeTmp;
-
                     commandeTmp = new Commande(13,liste,"dqsfqsf","qfqsf",userCmdObj.getUtilisateur());
                     */
-                    //Change la commande en cours
+
+                    //Charge la commande en cours
                     userCmdObj.setCommande( commandeTmp);
 
                     if( commandeTmp != null){
@@ -204,7 +191,6 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 }
                 break;
             case NAVIGATION1:
-                //Toast.makeText(getApplicationContext(), " > NAVIGATION1",Toast.LENGTH_SHORT).show();
                 setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.navigation);
                 compassView = (CompassView)findViewById(R.id.boussole);
                 textview_ptr = findViewById(R.id.product_name);
@@ -226,7 +212,6 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
                 break;
             case SEARCH_PRODUCT:
-                //Toast.makeText(getApplicationContext(), " > SEARCH_PRODUCT",Toast.LENGTH_SHORT).show();
                 codeBarre_scanned = getIntent().getStringExtra("CODE_BARRE");
                 if( userCmdObj.getCommande().checkArticle(codeBarre_scanned)){
                     if (userCmdObj.getCommande().getArticleCourrant().getQuantiteDemande() > 1) {
@@ -251,7 +236,6 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 }
                 break;
             case QUANTITY_INPUT:
-                //Toast.makeText(getApplicationContext(), " > QUANTITY_INPUT",Toast.LENGTH_SHORT).show();
                 setContentView(pfe.polytech.Vuzix_M100_entrepot.R.layout.quantity);
                 textview_ptr = findViewById(R.id.product_name);
                 textview_ptr.setText( userCmdObj.getCommande().getArticleCourrant().getNom());
@@ -271,8 +255,6 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
                         if(event.getAction() == KeyEvent.ACTION_DOWN
                         && keyCode == KeyEvent.KEYCODE_ENTER){
-                            //TODO: comment quitter le clavier après validation
-                            // solution trouvé mais sale
                             input.setEnabled(false);
                             input.setEnabled(true);
                             nextStep(v);
@@ -299,13 +281,10 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 missingBtn.setVisibility(View.INVISIBLE);
                 break;
             case COMMAND_ENDED:
-                //Toast.makeText(getApplicationContext(), " > COMMAND_ENDED",Toast.LENGTH_SHORT).show();
                 setContentView(R.layout.command_ended);
                 break;
             case SIGN_OUT:
-                //Toast.makeText(getApplicationContext(), " > SIGN_OUT",Toast.LENGTH_SHORT).show();
-                // TODO : gérer la déconnection coté serveur
-                Toast.makeText(getApplicationContext(), "Good Bye" + userCmdObj.getUtilisateur().getNom().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Good Bye " + userCmdObj.getUtilisateur().getNom().toString(), Toast.LENGTH_SHORT).show();
                 etatObj.setEtat( EtatSingleton.App_State.SIGN_IN);
                 changeState( );
                 break;
@@ -330,7 +309,7 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 changeState( );                         // on doit scanner le code barre d'un produit
                 break;
         }
-        lancerScan();               // Lancement du scan via la camera
+        lancerScan();                                   // Lancement du scan via la camera
     }
 
     @Override
@@ -355,22 +334,15 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
     public void lancerScan()
     {
         // Si la permission de la camera n'est pas accordé
-        //Todo: ajouter un message
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA}, ZBAR_CAMERA_PERMISSION);
         } else {                                  // Sinon lancer le scanner
             Intent scanActivityIntent = new Intent(this, ScanActivity.class);
-            //scanActivityIntent.putExtra("mainPID", myPID);
             this.startActivity( scanActivityIntent);
-            /*
-            scanActivity.getInstance().finish();
-            scanActivity.getInstance().onCreate(new Bundle());
-            */
+
             finish();
-            //myPID = android.os.Process.myPid();
-            //android.os.Process.killProcess(myPID);
         }
     }
     /*-----------------------------------  FIN CAMERA CODE -----------------------------------------*/
@@ -387,7 +359,6 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
         switch (app_state) {
             case INIT:
             case SIGN_IN:
-               // Toast.makeText(getApplicationContext(), R.string.exit_pending, Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case SEARCH_USER:
@@ -397,7 +368,6 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
                 break;
             case NAVIGATION1:
             case NAVIGATION2:
-               // Toast.makeText(getApplicationContext(), R.string.cannot_quit_command_pending, Toast.LENGTH_SHORT).show();
                 break;
             case QUANTITY_INPUT:
                 etatObj.setEtat( EtatSingleton.App_State.NAVIGATION1);
@@ -487,13 +457,11 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onPause() {
-        //Toast.makeText(getApplicationContext(), "MainActivity.onPause()", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
 
     @Override
     protected void onResume(){
-        //Toast.makeText(getApplicationContext(), "MainActivity.onResume()", Toast.LENGTH_SHORT).show();
         super.onResume();
         // Lie evenement de la boussole numérique au listener
         sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -501,7 +469,6 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onStop(){
-        //Toast.makeText(getApplicationContext(), "MainActivity.onStop()", Toast.LENGTH_SHORT).show();
         super.onStop();
         // Retire lien entre listener et evenements de la boussole numérique
         sensorManager.unregisterListener(sensorListener);
@@ -509,13 +476,11 @@ public class MainActivity extends Activity implements ZBarScannerView.ResultHand
 
     @Override
     protected void onRestart(){
-        //Toast.makeText(getApplicationContext(), "MainActivity.onRestart()", Toast.LENGTH_SHORT).show();
         super.onRestart();
     }
 
     @Override
     protected void onDestroy(){
-        //Toast.makeText(getApplicationContext(), "MainActivity.onDestroy()", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 }

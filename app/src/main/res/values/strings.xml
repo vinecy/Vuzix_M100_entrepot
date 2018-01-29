@@ -5,7 +5,7 @@
     <string name="any_user_finded">"Aucun utilisateur trouvé avec ce code barre. Veuillez réesayer"</string>
     <string name="app_name">Logistic Glasses</string>
     <string name="cannot_quit_command_pending">Impossible de quitter : Commande en cours !</string>
-    <string name="end_command">Commande fini</string>
+    <string name="end_command">Commande finie</string>
     <string name="enter_quantity">Saisir la quantité prise de ce produit</string>
     <string name="exit">Quitter</string>
     <string name="exit_pending">Fermeture en cours …</string>
@@ -30,6 +30,6 @@
     <string name="show_barcode_product">Montrer le code barre du produit dans la zone encadrée en vert de la caméra de votre appareil</string>
     <string name="user_finded">Utilisateur trouvé</string>
     <string name="welcome">Bienvenue</string>
-    <string name="goto_depot">Déposer commande fini.</string>
+    <string name="goto_depot">Déposer commande finie.</string>
     <string name="missing">Manquant</string>
 </resources>

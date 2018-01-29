@@ -15,12 +15,13 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 /**
- * Created by Vincent on 12/12/2017.
+ * Classe qui établit une connexion HTTP asynchrone avec le serveur
  */
 
 public class Connexionasync extends AsyncTask<String, Integer, String> {
 
-      String result;
+    /** resultat de la requête*/
+    String result;
 
     public Connexionasync() {
         result="";
@@ -40,7 +41,6 @@ public class Connexionasync extends AsyncTask<String, Integer, String> {
         Log.d("tag", "adress "+adress[0]);
 
         //creation connexion au seveur
-        //TODO généraliser le serveur grâce a URL
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(adress[0]);
         HttpResponse response = null;
@@ -79,7 +79,5 @@ public class Connexionasync extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
         Log.d("result",result);
-        //modification du texte de l'activité
-       // helloTextView.setText(result);
     }
 }
